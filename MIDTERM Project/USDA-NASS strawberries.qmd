@@ -1,0 +1,1277 @@
+---
+title: "straw1"
+author: "ma415"
+format: 
+  html:
+    embed-resources: true
+editor: visual
+---
+
+#URL=https://quickstats.nass.usda.gov/results/806E4FDF-C7DF-3DCC-8381-B220597B08EC
+
+# Preparing data for analysis
+
+## Introduction: foundations
+
+Before we begin to work with the strawberry data, let's talk about how we will approach the work.
+
+### Data cleaning and organization
+
+Cleaning and organizing data for analysis is an essential skill for data scientists. Serious data analyses must be presented with the data on which the results depend. The credibility of data analysis and modelling depends on the care taken in data preparation and organization.
+
+#### References
+
+In their handbook ["An introduction to data cleaning with R" by Edwin de Jonge and Mark van der Loo](https://cran.r-project.org/doc/contrib/de_Jonge+van_der_Loo-Introduction_to_data_cleaning_with_R.pdf), de Jonge and van der Loo go into detail about specific data cleaning isssues and how to handle them in R.
+
+["Problems, Methods, and Challenges in Comprehensive Data Cleansing" by Heiko Müller and Johann-Christoph Freytag](https://www.researchgate.net/profile/Heiko-Mueller/publication/228929938_Problems_methods_and_challenges_in_comprehensive_data_cleansing/links/09e415101b58541e2c000000/Problems-methods-and-challenges-in-comprehensive-data-cleansing.pdf) is a good companion to the de Jonge and van der Loo handbook, offering additional issues in their discussion.
+
+### Attitudes
+
+Mechanistic descriptions of data cleaning methods are insufficient.
+
+#### Data is the product (or by-product) of purposeful human activity
+
+Much of the data used in analysis accessed on local databases or online which may create the impression that the data have been carefully curated. Beware. Data are produced by people for a purpose, with a point-of-view, and at a time and location that may affect the data. The provenance and lineage of the data are meta data you should include when reporting analysis. Data collection is purposeful human activity with all of the risks and weaknesses that are part of any purposeful human activity.
+
+#### Data is language
+
+Data has meaning. Data can be included in sentences related to the meaning of the data. Cleaning and organizing data should be informed by the meaning the data convey and how that meaning relates to the research you are doing do achieve this important result.
+
+-   Immerse yourself in the data. Put data into context.
+
+-   Visualize the data to find problems, confirm your understandings, and plan your data organization. People do a bad job of seeing meaningful patterns in data but a good job of seeing patterns of all kinds when data are rendered as plots. As you product and show visualizations, ask your self and those who view your presentations, "what do you see?" and "what do you wonder?"
+
+## Example: Strawberries
+
+### Public information
+
+[WHO says strawberries may not be so safe for you--2017March16](https://med.news.am/eng/news/13621/who-says-strawberries-may-not-be-so-safe-for-you.html)
+
+[Pesticides + poison gases = cheap, year-round strawberries 2019March20](https://www.ewg.org/foodnews/strawberries.php)
+
+[Multistate Outbreak of Hepatitis A Virus Infections Linked to Fresh Organic Strawberries-2022March5](https://www.cdc.gov/hepatitis/outbreaks/fresh-strawberries-2022/?CDC_AAref_Val=https://www.cdc.gov/hepatitis/outbreaks/2022/hav-contaminated-food/index.htm)
+
+[Strawberry makes list of cancer-fighting foods-2023May31](https://issuu.com/mechlocal/docs/053123_mech_asf/s/25386339)
+
+## What is the question?
+
+-   Where they are grown? By whom?
+
+-   Are they really loaded with carcinogenic poisons?
+
+-   Are they really good for your health? Bad for your health?
+
+-   Are organic strawberries carriers of deadly diseases?
+
+-   When I go to the market should I buy conventional or organic strawberries?
+
+## The data
+
+The data set for this assignment has been selected from:
+
+[strawberries 2025feb24](https://quickstats.nass.usda.gov/results/806E4FDF-C7DF-3DCC-8381-B220597B08EC)
+
+<!-- and has been stored on the blackboard as strawberries25_v3.csv. -->
+
+## USDA NASS
+
+```{r}
+#| label: load libraries
+#| warning: false
+#| message: false
+
+library(knitr)  
+library(kableExtra)
+library(tidyverse)
+library(stringr)
+```
+
+## Read the file
+
+```{r}
+#| label: read data - glimpse 
+library(readr)
+library(tidyr)
+
+strawberry <- read_csv("strawb_mar6.csv")
+View(strawberry)
+
+source("my_functions.R")
+```
+
+```{r}
+#| Examine data and Drop columns
+library(rlang)
+library(dplyr)
+strawb <- strawberry |> drop_one_value_col()
+
+```
+
+```{r}
+#| Exploring starwberry data
+show_unique <- function(data, nrows = 10) {
+  items <- tibble()
+  for (col_name in colnames(data)) {
+    unique_values <- tibble(!!col_name := unique(data[[col_name]]))
+    if (nrow(unique_values) < nrows) {
+      unique_values <- unique_values %>%
+        add_row(!!col_name := rep(" ", nrows - nrow(unique_values)))
+    } else {
+      unique_values <- unique_values[1:nrows, , drop = FALSE]
+    }
+    items <- bind_cols(items, unique_values)
+  }
+  return(items)
+}
+#test <- show_unique(strawb, 10)
+#test
+```
+
+```{r}
+#|label: splitting data into two tables survey and census
+strwb_survey <- strawb |> filter(Program == "SURVEY")
+strwb_census <- strawb |> filter(Program == "CENSUS")
+```
+
+```{r}
+#|label: examining the Census and Survey
+s_census <- strwb_census |> drop_one_value_col(prt_val = TRUE)
+
+s_survey <- strwb_survey |> drop_one_value_col(prt_val = TRUE)
+
+
+##unique_sur <- s_survey |> show_unique(nrows = 10)
+
+#unique_cen <- s_census |> show_unique(nrows = 10)
+
+
+strwb_census <- s_census |> select(-`State ANSI`)
+
+strwb_survey <- s_survey |> select(-`State ANSI`, -`Week Ending`, -Period)
+
+rm(s_census, s_survey, strawberry, strawb, items)
+```
+
+```{r}
+#| Label: Split data
+
+strwb_census <- strwb_census |>
+  separate_wider_delim(  cols = Commodity,
+                         delim = ",",
+                         names = c("INCOME", 
+                                   "NET CASH FARM",
+                                   "STRAW"
+                                               ),
+                         too_many = "error",
+                         names_sep = " ",
+                         too_few = "align_start"
+  )
+
+
+
+inc <- strwb_census$Fruit |> unique()
+
+strwb_census <- strwb_census |>
+  separate_wider_delim(  cols = Fruit,
+                         delim = ",",
+                         names = c("INCOME", 
+                                   "STRAWB"
+                                               ),
+                         too_many = "error",
+                         too_few = "align_start"
+  )
+
+```
+
+```{r}
+#| label: Create 4 tibbles for each state. and source
+straw_cen_f <- strwb_census |> filter(State == "FLORIDA")
+
+straw_sur_f <- strwb_survey |> filter(State == "FLORIDA")
+straw_cen_c <- strwb_census |> filter(State == "CALIFORNIA")
+straw_sur_c <- strwb_survey |> filter(State == "CALIFORNIA")
+
+rm(strwb_census, strwb_survey, unique_cen, unique_sur)
+```
+
+```{r}
+#| label: Inspect tables before further modifications
+view(straw_cen_c)
+view(straw_cen_f)
+view(straw_sur_c)
+view(straw_sur_f)
+
+#notice that census has CV survey does not
+```
+
+```{r}
+#| Data exploration of four tibbles, Also creating a SD column
+census_tables <- list(straw_cen_c, straw_cen_f)  # has a CV (%)
+survey_tables <- list(straw_sur_c, straw_sur_f)  # do not have CV (%)
+
+#adding SD to census tables
+census_tables <- lapply(census_tables, function(df) {
+  df %>%
+    mutate(
+      # Remove commas, trim spaces, and convert to numeric otherwise it deletes the       #Value and makes it NA (took way to long to realize this)
+      Value = suppressWarnings(as.numeric(str_replace_all(trimws(Value), ",", ""))),
+      `CV (%)` = suppressWarnings(as.numeric(str_replace_all(trimws(`CV (%)`), ",", ""))),
+      SD = ifelse(!is.na(Value) & !is.na(`CV (%)`), (`CV (%)` / 100) * Value, NA)
+    )
+})
+
+tables <- c(census_tables, survey_tables)
+
+# back to original
+straw_cen_c <- tables[[1]]
+straw_cen_f <- tables[[2]]
+straw_sur_c <- tables[[3]]
+straw_sur_f <- tables[[4]]
+view(straw_cen_c)
+view(straw_cen_f)
+view(straw_sur_c)
+view(straw_sur_f)
+```
+
+```{r}
+#| Further cleaning
+straw_cen_c <- straw_cen_c %>% select(-`Commodity STRAW`) 
+straw_cen_c <- straw_cen_c %>% select(-STRAWB)
+straw_cen_f <- straw_cen_f %>% select(-`Commodity STRAW`) 
+straw_cen_f <- straw_cen_f %>% select(-STRAWB)
+view(straw_cen_f)
+view(straw_cen_c)
+```
+
+```{r}
+#| Unique for each state and survey type
+
+#unique_surf <- straw_sur_f |> show_unique(nrows = 10)
+#unique_surc <- straw_sur_c |> show_unique(nrows = 10)
+
+#unique_cenf <- straw_cen_f |> show_unique(nrows = 10)
+#unique_cenc <- straw_cen_c |> show_unique(nrows = 10)
+
+#view(unique_surf)
+##view(unique_surc)
+#view(unique_cenf)
+#view(unique_cenc)
+```
+
+```{r}
+#| Cleaning Census Florida
+
+clean_straw_cen_f <- straw_cen_f %>%
+  mutate(
+    Value = as.numeric(Value),
+    `CV (%)` = as.numeric(`CV (%)`),
+    SD = as.numeric(SD)
+  ) %>%
+  
+  mutate(
+    Value = ifelse(is.na(Value), 0, Value),
+    `CV (%)` = ifelse(is.na(`CV (%)`), 0, `CV (%)`),
+    SD = ifelse(is.na(SD), 0, SD)
+  ) %>%
+  rename(
+    Year = Year,
+    State = State,
+    Income_Category = `Commodity INCOME`,
+    Net_Cash_Income = `Commodity NET CASH FARM`,
+    Category = Category,
+    Item = Item,
+    Metric = Metric,
+    Domain = Domain,
+    Domain_Category = `Domain Category`,
+    Value = Value,
+    CV_Percent = `CV (%)`,
+    Standard_Deviation = SD
+  ) %>%
+  mutate(across(where(is.character), ~ str_trim(.)))
+view(clean_straw_cen_f)
+
+
+```
+
+```{r}
+#| cleaning census data California
+
+clean_straw_cen_c <- straw_cen_c %>%
+  mutate(
+    Value = as.numeric(Value),
+    `CV (%)` = as.numeric(`CV (%)`),
+    SD = as.numeric(SD)
+  ) %>%
+  
+  mutate(
+    Value = ifelse(is.na(Value), 0, Value),
+    `CV (%)` = ifelse(is.na(`CV (%)`), 0, `CV (%)`),
+    SD = ifelse(is.na(SD), 0, SD)
+  ) %>%
+  rename(
+    Year = Year,
+    State = State,
+    Income_Category = `Commodity INCOME`,
+    Net_Cash_Income = `Commodity NET CASH FARM`,
+    Category = Category,
+    Item = Item,
+    Metric = Metric,
+    Domain = Domain,
+    Domain_Category = `Domain Category`,
+    Value = Value,
+    CV_Percent = `CV (%)`,
+    Standard_Deviation = SD
+  ) %>%
+
+  mutate(across(where(is.character), ~ str_trim(.)))
+
+view(clean_straw_cen_c)
+
+
+```
+
+```{r}
+#| cleaning Survey Florida
+
+clean_straw_sur_f <- straw_sur_f %>%
+  select(where(~ any(!is.na(.)))) %>%
+  mutate(Value = as.numeric(gsub(",", "", Value))) %>%
+
+  mutate(Value = ifelse(is.na(Value), 0, Value)) %>%
+  rename(
+    Year = Year,
+    State = State,
+    Fruit_Type = Fruit,
+    Category = Category,
+    Item = Item,
+    Metric = Metric,
+    Domain = Domain,
+    Domain_Category = `Domain Category`,
+    Value = Value
+  ) %>%
+  mutate(across(where(is.character), ~ str_trim(.)))
+
+view(clean_straw_sur_f)
+
+
+```
+
+```{r}
+#| clean Califonia Survey
+
+clean_straw_sur_c <- straw_sur_c %>%
+  select(where(~ any(!is.na(.)))) %>%
+  mutate(Value = as.numeric(gsub(",", "", Value))) %>%
+
+  mutate(Value = ifelse(is.na(Value), 0, Value)) %>%
+  rename(
+    Year = Year,
+    State = State,
+    Fruit_Type = Fruit,
+    Category = Category,
+    Item = Item,
+    Metric = Metric,
+    Domain = Domain,
+    Domain_Category = `Domain Category`,
+    Value = Value
+  ) %>%
+  mutate(across(where(is.character), ~ str_trim(.)))
+
+view(clean_straw_sur_c)
+```
+
+```{r}
+#| Attempting to. answer Question 1
+#| Questions were changed but i will still leave this in here as I consider it an interesting point
+
+census_ca_fl <- bind_rows(
+  clean_straw_cen_c %>% mutate(State = "California"),
+  clean_straw_cen_f %>% mutate(State = "Florida")
+)
+
+unique(census_ca_fl$Metric)
+unique(census_ca_fl$Item)
+
+production_data <- census_ca_fl %>%
+  filter(
+    str_detect(tolower(Metric), "acre|cwt|production|yield|harvest") &
+    str_detect(tolower(Item), "strawberr|organic|fresh")
+  ) %>%
+  mutate(Value = as.numeric(Value)) %>%
+  group_by(State, Metric) %>%
+  summarise(Total_Value = sum(Value, na.rm = TRUE), .groups = "drop")
+
+print(production_data)
+
+ggplot(production_data, aes(x = State, y = Total_Value, fill = Metric)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Strawberry Production by State (California vs. Florida)",
+    x = "State",
+    y = "Total Value (Acreage/Weight)",
+    fill = "Metric"
+  ) +
+  theme_minimal()
+
+#seems that a vast majority of strawberries are grown in California, With further research i found articales sighting the numbers at 90% of US strawberries are grown in Cali and only 8% in Florida. https://www.ers.usda.gov/data-products/charts-of-note/chart-detail?chartId=101156 
+```
+
+```{r}
+#| taking the area operations table we completed in classes: 
+
+#unique_c_cen <- straw_cen_c |> show_unique(nrows = 10)
+
+## look at 2022
+
+str_cen_c_22 <- straw_cen_c |> filter(Year==2022)
+
+str_cen_c_22 <- str_cen_c_22 |> drop_one_value_col(prt_val = T)
+
+#unique_c_cen_22 <- str_cen_c_22 |> show_unique(nrows = 10)
+
+## work on "item" column
+
+## trim off the leading "OF OPERATIONS - "
+
+str_cen_c_22b  <- str_cen_c_22 |>
+  separate_wider_delim(  cols = Item,
+                         delim = " - ",
+                         names = c("old", 
+                                   "new"),
+                         too_many = "error",
+                         too_few = "align_start"
+                                               )
+str_cen_c_22b <- str_cen_c_22b |> drop_one_value_col(prt_val = T)  
+
+## OH! there are producers and operators
+
+str_cen_c_22c  <- str_cen_c_22b |>
+  separate_wider_delim(  cols = old,
+                         delim = "F ",
+                         names = c("old1", 
+                                   "type"),
+                         too_many = "error",
+                         too_few = "align_start")
+
+str_cen_c_22 <- str_cen_c_22c |> select(-old1)
+
+rm(str_cen_c_22b, str_cen_c_22c)
+
+str_cen_c_22_op <- str_cen_c_22 |> filter(type == "OPERATIONS")
+
+str_cen_c_22_pr <- str_cen_c_22 |> filter(type == "PRODUCERS")
+
+library(readr)
+library(scales)
+
+netinc_area <- str_cen_c_22_op |> filter(Domain == "AREA OPERATED")
+
+netinc_total <- str_cen_c_22_op |> filter(new =="NET INCOME" & Domain == "TOTAL")
+
+#had to add as.character
+a <- sum(parse_number(as.character(netinc_area$Value)))
+a
+
+format(a, big.mark=",")
+## millions
+format(round(a/1000000,1), big.mark=",")
+
+format(round(a/10^6,1), big.mark=",")
+
+dollar <- label_currency(a, 
+              accuracy = NULL,
+             scale = 1,
+             prefix = "$",
+             suffix = "",
+              big.mark = ",",
+             decimal.mark = ".",
+               trim = TRUE,
+            largest_with_fractional = 1e+05 )
+
+label_currency(accuracy=.01, 
+             scale_cut=cut_short_scale())(a)
+
+label_currency(accuracy=NULL, 
+             scale_cut=cut_long_scale())(a)
+
+## get the range out of Doman Category
+
+netinc_area_1  <- netinc_area |>
+  separate_wider_delim(  cols = `Domain Category`,
+                         delim = ": ",
+                         names = c("title", 
+                                   "range"),
+                         too_many = "error",
+                         too_few = "align_start")
+
+netinc_area_1$range <- gsub("[()]", "", netinc_area_1$range)
+
+netinc_area_1$range <- gsub(" ACRES", "", netinc_area_1$range)
+
+netinc_area_1$range <- gsub(" OR ", " TO ", netinc_area_1$range)
+
+netinc_area_1  <- netinc_area_1 |>
+  separate_wider_delim(  cols = range,
+                         delim = " TO ",
+                         names = c("lower", 
+                                   "upper"),
+                         too_many = "error",
+                         too_few = "align_start")
+
+netinc_area_1$lower <- parse_number(netinc_area_1$lower)
+
+netinc_area_1$upper <- parse_number(netinc_area_1$upper) |> round(0)
+
+netinc_area_1 <- netinc_area_1 |>arrange(lower)
+
+netinc_area_table <- netinc_area_1 |> select(lower, upper, Value, `CV (%)`)
+
+netinc_area_table$Value <- parse_number(as.character(netinc_area_table$Value))
+#had to add as.character to fix
+
+netinc_area_table |> kable()
+
+netinc_area_table |> kbl(caption = "Californina Average Net Income in 2022 by area cultivated  ") |> kable_classic(full_width = F, html_font = "Cambria") |> add_header_above(c( "Area Range (acres)" = 2, " " = 1, " " = 1))
+
+
+
+```
+
+```{r}
+#| Original attempt to graph area operated and net income
+
+income_area_data <- census_ca_fl %>% 
+  filter(
+    Income_Category == "INCOME",
+    Category == "NET CASH FARM",
+    Metric == "MEASURED IN $",
+    str_detect(Domain_Category, "AREA OPERATED")
+  ) %>%
+  mutate(Value = as.numeric(Value))
+
+print(income_area_data)
+
+if (nrow(income_area_data) > 0) {
+  ggplot(income_area_data, aes(x = Domain_Category, y = Value, fill = State)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    labs(
+      title = "Net Income by Area Operated (California vs. Florida)",
+      x = "Area Operated (Acres)",
+      y = "Net Cash Income ($)",
+      fill = "State"
+    ) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    theme_minimal() +
+     scale_x_discrete(labels = function(x) gsub("AREA OPERATED: ", "", x))
+} else {
+  print("No data found for Net Income by Area Operated.")
+}
+
+```
+
+```{r}
+#| Creating a graphic from the table we made in class.
+
+library(ggplot2)
+ggplot(netinc_area_table, aes(x = factor(lower), y = Value, fill = factor(lower))) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Net Income by Area Operated in California (2022)",
+    x = "Area Operated (Acres)",
+    y = "Net Cash Income ($)",
+    fill = "Area Range (Acres)"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = scales::label_dollar())
+
+ggplot(netinc_area_table, aes(x = factor(lower), y = `CV (%)`, fill = factor(lower))) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Coefficient of Variation (CV) by Area Operated in California (2022)",
+    x = "Area Operated (Acres)",
+    y = "CV (%)",
+    fill = "Area Range (Acres)"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+
+```{r}
+#| Starting to look at chemicals
+chemical_domains <- c("CHEMICAL, FUNGICIDE", "CHEMICAL, HERBICIDE", 
+                      "CHEMICAL, INSECTICIDE", "CHEMICAL, OTHER", 
+                      "FERTILIZER", "OTHER")
+
+chem_fl_survey <- clean_straw_sur_f %>%
+  filter(!is.na(Domain_Category)) %>%
+  mutate(
+    Chemical_Name = str_extract(Domain_Category, "(?<=: \\()(.*?)(?=\\))"),
+    Chemical_Value = parse_number(as.character(Value))
+  )
+
+top_chemicals_fl <- chem_fl_survey %>%
+  group_by(Domain, Chemical_Name) %>%
+  summarise(Total_Usage = sum(Chemical_Value, na.rm = TRUE), .groups = "drop") %>%
+  arrange(desc(Total_Usage)) %>%
+  slice_max(Total_Usage, n = 15)
+
+top_chemicals_fl_filtered <- top_chemicals_fl %>%
+  filter(Chemical_Name != "TOTAL")
+
+top_chemicals_fl_filtered %>%
+  kable("html", caption = "Top 15 High-Value Chemicals in Florida") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE) %>%
+  column_spec(1, bold = TRUE) %>%
+  column_spec(3, background = "lightgray")
+
+#deletes 4 rows, but we only want 3 so should be enough to work with.
+
+```
+
+```{r}
+#| Seperate table for Totals
+total_chemicals_fl <- top_chemicals_fl %>%
+  filter(Chemical_Name == "TOTAL")
+print(total_chemicals_fl)
+#Tells me i want to focus on Fungicide chemicals they as a category make up the majority
+
+```
+
+```{r}
+#| Repeating Chemical list steps for California
+chemical_domains <- c("CHEMICAL, FUNGICIDE", "CHEMICAL, HERBICIDE", 
+                      "CHEMICAL, INSECTICIDE", "CHEMICAL, OTHER", 
+                      "FERTILIZER", "OTHER")
+
+chem_ca_survey <- clean_straw_sur_c %>%
+  filter(!is.na(Domain_Category)) %>%
+  mutate(
+    Chemical_Name = str_extract(Domain_Category, "(?<=: \\()(.*?)(?=\\))"),
+    Chemical_Value = parse_number(as.character(Value))
+  )
+
+top_chemicals_ca <- chem_ca_survey %>%
+  group_by(Domain, Chemical_Name) %>%
+  summarise(Total_Usage = sum(Chemical_Value, na.rm = TRUE), .groups = "drop") %>%
+  arrange(desc(Total_Usage)) %>%
+  slice_max(Total_Usage, n = 15)
+
+top_chemicals_ca_filtered <- top_chemicals_ca %>%
+  filter(Chemical_Name != "TOTAL")
+
+top_chemicals_ca_filtered %>%
+  kable("html", caption = "Top 15 High-Value Chemicals in California") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE) %>%
+  column_spec(1, bold = TRUE) %>%
+  column_spec(3, background = "lightgray")
+```
+
+```{r}
+#| Checking totals in California
+
+total_chemicals_ca <- top_chemicals_ca %>%
+  filter(Chemical_Name == "TOTAL")
+print(total_chemicals_ca)
+
+top_fungicides_ca <- chem_ca_survey %>%
+  filter(grepl("FUNGICIDE", Domain, ignore.case = TRUE)) %>%  
+  group_by(Domain, Chemical_Name) %>%
+  summarise(Total_Usage = sum(Chemical_Value, na.rm = TRUE), .groups = "drop") %>%
+  arrange(desc(Total_Usage)) %>%
+  slice_max(Total_Usage, n = 15)
+top_fungicides_ca <- top_fungicides_ca %>%
+  filter(Chemical_Name != "TOTAL")
+print(top_fungicides_ca)
+
+top_fungicides_fl <- chem_fl_survey %>%
+  filter(grepl("FUNGICIDE", Domain, ignore.case = TRUE)) %>%  
+  group_by(Domain, Chemical_Name) %>%
+  summarise(Total_Usage = sum(Chemical_Value, na.rm = TRUE), .groups = "drop") %>%
+  arrange(desc(Total_Usage)) %>%
+  slice_max(Total_Usage, n = 15)
+top_fungicides_fl <- top_fungicides_fl %>%
+  filter(Chemical_Name != "TOTAL")
+print(top_fungicides_fl)
+#Intresting to note CA has a big total of OTHER I would be curious to explore what that might include. Second is still FUNGICIDE. But with production of > 10 x that of floridas only about a 5 x increase in Fungicide is also intresting to explore
+```
+
+```{r}
+#| Listing the three chemicals i want to explore and compare
+#| 1. CAPTAN = 81301 a FUNGICIDE used alot in both states.
+#| 2. Fertilizer Phosphate probably the most famous chemical here and so it deserves exploring
+#| 3. CHLOROPICRIN = 81501 the number one chemical by a margin in the number one production market deserves some exploration.
+```
+
+```{r}
+#| Exploring CAPTAN = 81301
+
+captan_ca <- clean_straw_sur_c %>%
+  filter(grepl("CAPTAN = 81301", Domain_Category)) %>%
+  select(Year, Item, Value) %>%
+  mutate(State = "CALIFORNIA")
+
+captan_fl <- clean_straw_sur_f %>%
+  filter(grepl("CAPTAN = 81301", Domain_Category)) %>%
+  select(Year, Item, Value) %>%
+  mutate(State = "FLORIDA")
+
+captan_data <- bind_rows(captan_ca, captan_fl)
+
+duplicate_check <- captan_data %>%
+  group_by(Year, State, Item) %>%
+  filter(n() > 1)
+
+if(nrow(duplicate_check) > 0) {
+  print("Found duplicates, displaying them:")
+  print(duplicate_check)
+} else {
+  print("No duplicates found. Proceeding with reshaping.")
+}
+captan_data_table <- captan_data %>%
+  distinct(Year, State, Item, .keep_all = TRUE) %>%
+  spread(key = Item, value = Value)
+print(captan_data_table)
+
+ggplot(captan_data %>% filter(Item == "MEASURED IN LB"), 
+       aes(x = Item, y = Value, fill = interaction(State, Year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Total LB CAPTAN (81301) Usage in Strawberries (California vs. Florida)",
+    x = "Metric",
+    y = "Value",
+    fill = "State and Year"
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(captan_data %>% filter(Item == "MEASURED IN PCT OF AREA BEARING"), 
+       aes(x = Item, y = Value, fill = interaction(State, Year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "PCT of AREA CAPTAN (81301) Usage in Strawberries (California vs. Florida)",
+    x = "Metric",
+    y = "Value",
+    fill = "State and Year"
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(captan_data %>% filter(Item == "MEASURED IN LB / ACRE / YEAR"), 
+       aes(x = Item, y = Value, fill = interaction(State, Year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "LB per ACRE per YEAR CAPTAN (81301) Usage in Strawberries (California vs. Florida)",
+    x = "Metric",
+    y = "Value",
+    fill = "State and Year"
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+
+```{r}
+#| Exploring Phosphate
+
+phosphate_ca <- clean_straw_sur_c %>%
+  filter(grepl("PHOSPHATE", Domain_Category) & grepl("FERTILIZER", Domain_Category)) %>%
+  select(Year, Item, Value) %>%
+  mutate(State = "CALIFORNIA")
+
+phosphate_fl <- clean_straw_sur_f %>%
+  filter(grepl("PHOSPHATE", Domain_Category) & grepl("FERTILIZER", Domain_Category)) %>%
+  select(Year, Item, Value) %>%
+  mutate(State = "FLORIDA")
+
+phosphate_data <- bind_rows(phosphate_ca, phosphate_fl)
+
+duplicate_check <- phosphate_data %>%
+  group_by(Year, State, Item) %>%
+  filter(n() > 1)
+
+if(nrow(duplicate_check) > 0) {
+  print("Found duplicates, displaying them:")
+  print(duplicate_check)
+} else {
+  print("No duplicates found. Proceeding with reshaping.")
+}
+
+phosphate_data_table <- phosphate_data %>%
+  distinct(Year, State, Item, .keep_all = TRUE) %>%
+  spread(key = Item, value = Value)
+
+print(phosphate_data_table)
+
+ggplot(phosphate_data %>% filter(Item == "MEASURED IN LB"), 
+       aes(x = Item, y = Value, fill = interaction(State, Year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Total LB Phosphate Usage in Strawberries (California vs. Florida)",
+    x = "Metric",
+    y = "Value",
+    fill = "State and Year"
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(phosphate_data %>% filter(Item == "MEASURED IN PCT OF AREA BEARING"), 
+       aes(x = Item, y = Value, fill = interaction(State, Year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "PCT of Area Phosphate Usage in Strawberries (California vs. Florida)",
+    x = "Metric",
+    y = "Value",
+    fill = "State and Year"
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(phosphate_data %>% filter(Item == "MEASURED IN LB / ACRE / YEAR"), 
+       aes(x = Item, y = Value, fill = interaction(State, Year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "LB per ACRE per YEAR Phosphate Usage in Strawberries (California vs. Florida)",
+    x = "Metric",
+    y = "Value",
+    fill = "State and Year"
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+  
+
+```
+
+```{r}
+#| build on last chemcial analysis and create some new graphics
+
+data_ca <- clean_straw_sur_c %>%
+  filter(grepl("PHOSPHATE", Domain_Category)) %>%
+  group_by(Item) %>%
+  summarise(Value = sum(Value, na.rm = TRUE)) %>%
+  pivot_wider(names_from = Item, values_from = Value)
+
+data_fl <- clean_straw_sur_f %>%
+  filter(grepl("PHOSPHATE", Domain_Category)) %>%
+  group_by(Item) %>%
+  summarise(Value = sum(Value, na.rm = TRUE)) %>%
+  pivot_wider(names_from = Item, values_from = Value)
+
+data <- bind_rows(
+  data_ca %>% mutate(State = "California"),
+  data_fl %>% mutate(State = "Florida")
+)
+
+data <- data %>%
+  rename(
+    Total_Usage_LB = `MEASURED IN LB`,
+    Phosphate_LB_per_Acre_Application = `MEASURED IN LB / ACRE / APPLICATION`,
+    Phosphate_LB_per_Acre_Year = `MEASURED IN LB / ACRE / YEAR`,
+    Applications_Avg = `MEASURED IN NUMBER`,
+    Percent_Area_Treated = `MEASURED IN PCT OF AREA BEARING`
+  ) %>%
+  select(State, Total_Usage_LB, Phosphate_LB_per_Acre_Application,
+         Phosphate_LB_per_Acre_Year, Applications_Avg, Percent_Area_Treated)
+
+data %>%
+  kbl(
+    caption = "Phosphate Application Data for California and Florida (2023)",
+    col.names = c("State", "Total Usage (LB)", "LB/Acre/Application", "LB/Acre/Year", "Avg Applications", "% Area Treated"),
+    align = "c"
+  ) %>%
+  kable_classic(full_width = FALSE, html_font = "Cambria") %>%
+  add_header_above(c("State" = 1, "Phosphate Application Metrics" = 5))
+
+# Bar Plot: Total Phosphate Usage
+ggplot(data, aes(x = State, y = Total_Usage_LB, fill = State)) +
+  geom_bar(stat = "identity", width = 0.5, color = "black") +
+  labs(
+    title = "Total Phosphate Usage (LB) - California vs. Florida",
+    x = "State",
+    y = "Total Phosphate Usage (LB)"
+  ) +
+  scale_fill_manual(values = c("California" = "steelblue", "Florida" = "darkorange")) +
+  theme_minimal()
+
+# Stacked Bar Plot: Applications and Percent Area Treated
+data_long <- data %>%
+  select(State, Applications_Avg, Percent_Area_Treated) %>%
+  pivot_longer(cols = -State, names_to = "Metric", values_to = "Value")
+
+ggplot(data_long, aes(x = State, y = Value, fill = Metric)) +
+  geom_bar(stat = "identity", position = "dodge", color = "black") +
+  labs(
+    title = "Phosphate Applications and Area Treated (%) - California vs. Florida",
+    x = "State",
+    y = "Value"
+  ) +
+  scale_fill_manual(values = c("Applications_Avg" = "lightgreen", "Percent_Area_Treated" = "lightcoral"),
+                    labels = c("Avg Applications", "Percent Area Treated")) +
+  theme_minimal()
+
+
+
+
+```
+
+```{r}
+#| Exploring third Chemical CHLOROPICRIN = 81501
+#| unfortunatly no data for florida 
+data_ca_chloro <- clean_straw_sur_c %>%
+  filter(grepl("CHLOROPICRIN = 81501", Domain_Category)) %>%
+  group_by(Item) %>%
+  summarise(Value = sum(Value, na.rm = TRUE)) %>%
+  pivot_wider(names_from = Item, values_from = Value)
+#made empty table for uniformity
+data_fl_chloro <- tibble(
+  `MEASURED IN LB` = NA,
+  `MEASURED IN LB / ACRE / APPLICATION` = NA,
+  `MEASURED IN LB / ACRE / YEAR` = NA,
+  `MEASURED IN NUMBER` = NA,
+  `MEASURED IN PCT OF AREA BEARING` = NA,
+  State = "Florida"
+)
+
+data_chloro <- bind_rows(
+  data_ca_chloro %>% mutate(State = "California"),
+  data_fl_chloro
+)
+
+data_chloro <- data_chloro %>%
+  rename(
+    Total_Usage_LB = `MEASURED IN LB`,
+    Chloropicrin_LB_per_Acre_Application = `MEASURED IN LB / ACRE / APPLICATION`,
+    Chloropicrin_LB_per_Acre_Year = `MEASURED IN LB / ACRE / YEAR`,
+    Applications_Avg = `MEASURED IN NUMBER`,
+    Percent_Area_Treated = `MEASURED IN PCT OF AREA BEARING`
+  ) %>%
+  select(State, Total_Usage_LB, Chloropicrin_LB_per_Acre_Application,
+         Chloropicrin_LB_per_Acre_Year, Applications_Avg, Percent_Area_Treated)
+
+data_chloro %>%
+  kbl(
+    caption = "Chloropicrin Application Data for California and Florida (2023)",
+    col.names = c("State", "Total Usage (LB)", "LB/Acre/Application", "LB/Acre/Year", "Avg Applications", "% Area Treated"),
+    align = "c"
+  ) %>%
+  kable_classic(full_width = FALSE, html_font = "Cambria") %>%
+  add_header_above(c("State" = 1, "Chloropicrin Application Metrics" = 5))
+
+data_ca_chloro <- data_ca_chloro %>%
+  rename(
+    Total_Usage_LB = `MEASURED IN LB`,
+    Chloropicrin_LB_per_Acre_Application = `MEASURED IN LB / ACRE / APPLICATION`,
+    Chloropicrin_LB_per_Acre_Year = `MEASURED IN LB / ACRE / YEAR`,
+    Applications_Avg = `MEASURED IN NUMBER`,
+    Percent_Area_Treated = `MEASURED IN PCT OF AREA BEARING`
+  )
+
+data_long <- data_ca_chloro %>%
+  select(Total_Usage_LB, Chloropicrin_LB_per_Acre_Application, 
+         Chloropicrin_LB_per_Acre_Year, Applications_Avg, Percent_Area_Treated) %>%
+  pivot_longer(cols = everything(), names_to = "Metric", values_to = "Value")
+
+ggplot(data_long, aes(x = Metric, y = Value, fill = Metric)) +
+  geom_bar(stat = "identity", color = "black", width = 0.6) +
+  geom_text(aes(label = round(Value, 1)), vjust = -0.5, size = 4) +
+  labs(
+    title = "Annotated Bar Plot: Chloropicrin Application Metrics (California Only)",
+    x = "Metric",
+    y = "Value"
+  ) +
+  scale_fill_brewer(palette = "Set2") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 30, hjust = 1))
+
+```
+
+```{r}
+#| Production and sales Organic vs Non Organic (Conventional) On volume and price
+
+organic_datac <- clean_straw_cen_c %>%
+  filter(grepl("ORGANIC", Category, ignore.case = TRUE)) %>%
+  select(Year, Category, Item, Value, CV_Percent)
+
+organic_datac %>%
+  kable("html", caption = "Key Organic Strawberry Data from California") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE)
+
+organic_dataf <- clean_straw_cen_f %>%
+  filter(grepl("ORGANIC", Category, ignore.case = TRUE)) %>%
+  select(Year, Category, Item, Value, CV_Percent)
+
+organic_dataf %>%
+  kable("html", caption = "Key Organic Strawberry Data from California") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE)
+
+#The CV is really high in Cali and does not have enough infomration in Florida to be interesting to look at.
+
+
+
+```
+
+```{r}
+#| there was very little data to work with in regards to organic strawberries
+#| I wanted to explore the Farm Sales Domain and find the net. profit or loss for each sale interval in Florida vs California
+
+fl_cen_f_22 <- clean_straw_cen_f |> filter(Year == 2022 & State == "FLORIDA")
+
+fl_cen_f_22 <- fl_cen_f_22 |>
+  separate_wider_delim(
+    cols = Item,
+    delim = " - ",
+    names = c("type", "metric"),
+    too_many = "error",
+    too_few = "align_start"
+  ) |>
+  separate_wider_delim(
+    cols = type,
+    delim = "F ",
+    names = c("drop", "type"),
+    too_many = "error",
+    too_few = "align_start"
+  ) |>
+  select(-drop)
+
+fl_cen_f_22_op <- fl_cen_f_22 |> filter(type == "OPERATIONS")
+fl_cen_f_22_pr <- fl_cen_f_22 |> filter(type == "PRODUCERS")
+
+netinc_sales <- fl_cen_f_22_op |> 
+  filter(metric == "NET INCOME" & Domain == "FARM SALES")
+
+a <- sum(parse_number(as.character(netinc_sales$Value)))
+format(a, big.mark=",")
+format(round(a/1000000,1), big.mark=",")
+
+netinc_sales_1 <- netinc_sales |>
+  separate_wider_delim(
+    cols = Domain_Category,
+    delim = ": ",
+    names = c("title", "range"),
+    too_many = "error",
+    too_few = "align_start"
+  )
+
+netinc_sales_1$range <- gsub("[()]", "", netinc_sales_1$range)
+netinc_sales_1$range <- gsub(" \\$", "", netinc_sales_1$range)
+netinc_sales_1$range <- gsub(" OR ", " TO ", netinc_sales_1$range)
+netinc_sales_1$range <- gsub("LESS THAN ", "0 TO ", netinc_sales_1$range)
+
+netinc_sales_1 <- netinc_sales_1 |>
+  separate_wider_delim(
+    cols = range,
+    delim = " TO ",
+    names = c("lower", "upper"),
+    too_many = "error",
+    too_few = "align_start"
+  )
+
+netinc_sales_1$lower <- parse_number(netinc_sales_1$lower)
+netinc_sales_1$upper <- parse_number(netinc_sales_1$upper) |> round(0)
+netinc_sales_1$Value <- parse_number(as.character(netinc_sales_1$Value))
+
+netinc_sales_1 <- netinc_sales_1 |> arrange(lower)
+
+netinc_sales_table <- netinc_sales_1 |> 
+  select(lower, upper, Value, CV_Percent)
+
+netinc_sales_table |> 
+  kbl(caption = "Florida Average Net Income in 2022 by Farm Sales Category") |> 
+  kable_classic(full_width = F, html_font = "Cambria") |> 
+  add_header_above(c("Sales Range ($)" = 2, " " = 1, " " = 1))
+```
+
+```{r}
+#| Using same code on california
+
+ca_cen_c_22 <- clean_straw_cen_c |> filter(Year == 2022 & State == "CALIFORNIA")
+
+ca_cen_c_22 <- ca_cen_c_22 |>
+  separate_wider_delim(
+    cols = Item,
+    delim = " - ",
+    names = c("type", "metric"),
+    too_many = "error",
+    too_few = "align_start"
+  ) |>
+  separate_wider_delim(
+    cols = type,
+    delim = "F ",
+    names = c("drop", "type"),
+    too_many = "error",
+    too_few = "align_start"
+  ) |>
+  select(-drop)
+
+ca_cen_c_22_op <- ca_cen_c_22 |> filter(type == "OPERATIONS")
+ca_cen_c_22_pr <- ca_cen_c_22 |> filter(type == "PRODUCERS")
+
+netinc_area <- ca_cen_c_22_op |> 
+  filter(metric == "NET INCOME" & Domain == "AREA OPERATED")
+
+total_netinc <- sum(parse_number(as.character(netinc_area$Value)))
+cat("Total net income:", format(total_netinc, big.mark=","), "\n")
+cat("Total in millions:", format(round(total_netinc/1000000,1), big.mark=","), "\n")
+
+netinc_area_1 <- netinc_area |>
+  separate_wider_delim(
+    cols = Domain_Category,
+    delim = ": ",
+    names = c("title", "range"),
+    too_many = "error",
+    too_few = "align_start"
+  )
+
+netinc_area_1$range <- gsub("[()]", "", netinc_area_1$range)
+netinc_area_1$range <- gsub(" ACRES", "", netinc_area_1$range)
+netinc_area_1$range <- gsub(" OR ", " TO ", netinc_area_1$range)
+netinc_area_1$range <- gsub("LESS THAN ", "0 TO ", netinc_area_1$range)
+
+
+netinc_area_1 <- netinc_area_1 |>
+  separate_wider_delim(
+    cols = range,
+    delim = " TO ",
+    names = c("lower", "upper"),
+    too_many = "error",
+    too_few = "align_start"
+  )
+
+netinc_area_1$lower <- parse_number(netinc_area_1$lower)
+netinc_area_1$upper <- parse_number(netinc_area_1$upper) |> round(0)
+netinc_area_1$Value <- parse_number(as.character(netinc_area_1$Value))
+
+
+netinc_area_1 <- netinc_area_1 |> arrange(lower)
+
+netinc_area_table <- netinc_area_1 |> 
+  select(lower, upper, Value, CV_Percent)
+
+netinc_area_table |> 
+  kbl(caption = "California Average Net Income in 2022 by Area Operated (acres)") |> 
+  kable_classic(full_width = F, html_font = "Cambria") |> 
+  add_header_above(c("Area Range (acres)" = 2, " " = 1, " " = 1))
+
+```
+
+```{r}
+#| want to make 3 graphs one for each alone one comparing the two
+netinc_area_table_ca <- netinc_area_table |> 
+  mutate(State = "California")
+
+netinc_sales_table_fl <- netinc_sales_table |> 
+  mutate(State = "Florida")
+
+combined_data <- bind_rows(
+  netinc_area_table_ca |> select(State, lower, Value, CV_Percent),
+  netinc_sales_table_fl |> select(State, lower, Value, CV_Percent)
+)
+
+ggplot(netinc_area_table_ca, aes(x = factor(lower), y = Value, fill = factor(lower))) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Net Income by Area Operated in California (2022)",
+    x = "Area Operated (Acres)",
+    y = "Net Cash Income ($)",
+    fill = "Area Range (Acres)"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = scales::label_dollar()) +
+  scale_fill_viridis_d()
+
+ggplot(netinc_sales_table_fl, aes(x = factor(lower), y = Value, fill = factor(lower))) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Net Income by Farm Sales in Florida (2022)",
+    x = "Farm Sales ($)",
+    y = "Net Cash Income ($)",
+    fill = "Sales Range ($)"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = scales::label_dollar()) +
+  scale_fill_viridis_d()
+
+bin_labels <- c("0-1K", "1K-2.5K", "2.5K-5K", "5K-10K", "10K-25K", 
+               "25K-50K", "50K-100K", "100K-250K", "250K-500K", 
+               "500K-1M", "1M+")
+
+combined_comparison <- bind_rows(
+  netinc_area_table_ca |>
+    mutate(
+      bin = cut(lower, 
+                breaks = c(0, 1, 2.5, 5, 10, 25, 50, 100, 250, 500, 1000, Inf),
+                labels = bin_labels,
+                right = FALSE),
+      State = "California (Acres)"
+    ),
+  
+  netinc_sales_table_fl |>
+    mutate(
+      bin = cut(lower/1000,  # Convert dollars to thousands to match acre scale
+                breaks = c(0, 1, 2.5, 5, 10, 25, 50, 100, 250, 500, 1000, Inf),
+                labels = bin_labels,
+                right = FALSE),
+      State = "Florida ($1000s)"
+    )
+) |>
+  filter(!is.na(bin))  
+
+ggplot(combined_comparison, aes(x = bin, y = Value/1e6, fill = State)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.8), width = 0.7) +
+  labs(
+    title = "Comparison of Net Farm Income by Size Category (2022)",
+    subtitle = "California by Acres vs Florida by Sales ($1000s)",
+    x = "Size Category",
+    y = "Net Income (Millions $)",
+    fill = ""
+  ) +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  scale_fill_manual(values = c("California (Acres)" = "#1f77b4", 
+                              "Florida ($1000s)" = "#ff7f0e")) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    legend.position = "top",
+    plot.title = element_text(size = 14, face = "bold"),
+    plot.subtitle = element_text(size = 12)
+  )
+```
+
+\
+
+```{r}
+#relationships between numbers driving income
+#Tables, Kable, Kablextra
+#make plots, esquisser, ggplot, ggplot2
+#label chunks
+#piuck 3 chenmicals 
+#contrast chemical us inflorida vs california
+#pick somne measures to compare them
+#look at income from florida vs california in organic convenital or processed
+# maybe compare fruit size between markets
+#include writing explaining insights and doings
+#maybe add images
+
+#seperate producers and operations
+
+#Pick three chemical treatments used for conventional strawberries in both states and contrast their use. Try to find chemicals with divergent use patterns between the states. Produce, tables, plots, and descriptions of the chemicals, how they are used, and how their use differs between California and Florida.
+
+#Compare the production and sales of organic and conventional strawberries and strawberries sold for processing. Show differences in price and volume between California and Florida. How do price, cost, and volume relationships change over the years?
+
+
+```
+
+Examine the data. How is it organized?
