@@ -1,6 +1,6 @@
 ---
-title: "straw1"
-author: "ma415"
+title: "Strawberry EDA"
+author: "Luke Mager: U17823225"
 format: 
   html:
     embed-resources: true
@@ -107,6 +107,10 @@ strawb <- strawberry |> drop_one_value_col()
 
 ```
 
+### Show Unique Function (In Class)
+
+We ran this function in class and I used it multiple times throughout the exploration process, but I made an adjustment later on in the the process that now seems to cause an error when running the code continuously. I have decided to comment it out since it has served its use in identifying of interest records and building from there.
+
 ```{r}
 #| Exploring starwberry data
 show_unique <- function(data, nrows = 10) {
@@ -204,16 +208,18 @@ view(straw_sur_f)
 #notice that census has CV survey does not
 ```
 
+### Adding SD to Tibbles
+
+Something breifly mentioned in class the week after break was that in the census tables we have values and CV %. This would allow us to calculate the SD for all of these inputs which may be of interest. I took on this challenge. I had to convert all the data in CV and Value to numeric so removing spaces and commas and then using these numeric values to create a new column SD. I applied the function to both Florida and Cali tables at the same time and then reassigned back to original names. I had orginally forgot survey data did not include CV % that is why some extra code is in there.
+
 ```{r}
 #| Data exploration of four tibbles, Also creating a SD column
 census_tables <- list(straw_cen_c, straw_cen_f)  # has a CV (%)
 survey_tables <- list(straw_sur_c, straw_sur_f)  # do not have CV (%)
 
-#adding SD to census tables
 census_tables <- lapply(census_tables, function(df) {
   df %>%
     mutate(
-      # Remove commas, trim spaces, and convert to numeric otherwise it deletes the       #Value and makes it NA (took way to long to realize this)
       Value = suppressWarnings(as.numeric(str_replace_all(trimws(Value), ",", ""))),
       `CV (%)` = suppressWarnings(as.numeric(str_replace_all(trimws(`CV (%)`), ",", ""))),
       SD = ifelse(!is.na(Value) & !is.na(`CV (%)`), (`CV (%)` / 100) * Value, NA)
@@ -222,7 +228,6 @@ census_tables <- lapply(census_tables, function(df) {
 
 tables <- c(census_tables, survey_tables)
 
-# back to original
 straw_cen_c <- tables[[1]]
 straw_cen_f <- tables[[2]]
 straw_sur_c <- tables[[3]]
@@ -257,6 +262,10 @@ view(straw_cen_c)
 #view(unique_cenf)
 #view(unique_cenc)
 ```
+
+### Cleaning Split Tibbles
+
+This was a final cleaning step that just tidied up some of the column names and ensured that all the numeric values were stored in numeric format so analysis could be conducted. I chose to replace NA with 0 in numeric columns even though it may not always be an appropriate assumption because its uninterperable either way and 0 will not result in errors.
 
 ```{r}
 #| Cleaning Census Florida
@@ -380,9 +389,16 @@ clean_straw_sur_c <- straw_sur_c %>%
 view(clean_straw_sur_c)
 ```
 
+### Question 1
+
+This was the old question one asking where strawberries were being grown and I hadnt gotten too far with it when the questions were changed, but i thought it was still worth including as I did do some work on it. It seems that a vast majority of strawberries are grown in California. With some further research I found articales sighting the numbers at 90% of US strawberries are grown in Cali and only 8% in Florida.
+
+<https://www.ers.usda.gov/data-products/charts-of-note/chart-detail?chartId=101156>
+
+The filter I had created was built for further analysis into metrics such as acres and yield though i don't think it is fully functioning, but I onyl got as far as comparing total weight between the states which was still an interesting finding.
+
 ```{r}
 #| Attempting to. answer Question 1
-#| Questions were changed but i will still leave this in here as I consider it an interesting point
 
 census_ca_fl <- bind_rows(
   clean_straw_cen_c %>% mutate(State = "California"),
@@ -412,9 +428,9 @@ ggplot(production_data, aes(x = State, y = Total_Value, fill = Metric)) +
     fill = "Metric"
   ) +
   theme_minimal()
-
-#seems that a vast majority of strawberries are grown in California, With further research i found articales sighting the numbers at 90% of US strawberries are grown in Cali and only 8% in Florida. https://www.ers.usda.gov/data-products/charts-of-note/chart-detail?chartId=101156 
 ```
+
+### In Class Area Operations Table
 
 ```{r}
 #| taking the area operations table we completed in classes: 
@@ -537,6 +553,10 @@ netinc_area_table |> kbl(caption = "Californina Average Net Income in 2022 by ar
 
 ```
 
+### Attempt at Visualizing Area Operation
+
+This was actually something I had worked on before our class where you made the perfect table. I hadn't thought to extraact the data ranges and print the lower and upper in seperate columns and so i was struggling to visualize in a ascending order and being able to fit the long x values on the axis.
+
 ```{r}
 #| Original attempt to graph area operated and net income
 
@@ -569,6 +589,10 @@ if (nrow(income_area_data) > 0) {
 
 ```
 
+### Visualizing In Class Area Operations Table
+
+I thought before I dived into chemicals I wanted to use the neatly layed out table provided and create some visuals. I initially made these two one showing the net income distribution and the other the CV % and I had AI clean up the graphs and make them more visually appealing. It added things like color for each level and the slight angel to the the x axis, but I probably could do without the additional key on the right.
+
 ```{r}
 #| Creating a graphic from the table we made in class.
 
@@ -598,6 +622,10 @@ ggplot(netinc_area_table, aes(x = factor(lower), y = `CV (%)`, fill = factor(low
 
 
 ```
+
+### Extracting Top Used Chemicals
+
+The most challenging part of this process was extracting chemcial names from within the parenthesis of Domain Category. I used REGEX which took alot of research to figure out how to properly format to get it to do what I wanted. (?\<=: \\\\() was used to take anything after :( then the next step was using (.\*?) to capture the characters. Lastly (?=\\\\)) tells it to stop at ). I believe this worked and i was then able to apply it to both states and list chemicals with the highest totals.
 
 ```{r}
 #| Starting to look at chemicals
@@ -631,12 +659,13 @@ top_chemicals_fl_filtered %>%
 
 ```
 
+I kept the TOTAL rows separate and. used them to help guide towards which subcategory of chemicals i might want to investigate.
+
 ```{r}
 #| Seperate table for Totals
 total_chemicals_fl <- top_chemicals_fl %>%
   filter(Chemical_Name == "TOTAL")
 print(total_chemicals_fl)
-#Tells me i want to focus on Fungicide chemicals they as a category make up the majority
 
 ```
 
@@ -669,6 +698,8 @@ top_chemicals_ca_filtered %>%
   column_spec(3, background = "lightgray")
 ```
 
+Intresting to note CA has a big total of OTHER I would be curious to explore what that might include. Second is still FUNGICIDE. But with production of \> 10 x that of floridas only about a 5 x increase in Fungicide is also intresting to explore. I also wanted tables for just fungicide as it seems to be one of the top subcategories in both and wanted a better look at the list.
+
 ```{r}
 #| Checking totals in California
 
@@ -695,15 +726,19 @@ top_fungicides_fl <- chem_fl_survey %>%
 top_fungicides_fl <- top_fungicides_fl %>%
   filter(Chemical_Name != "TOTAL")
 print(top_fungicides_fl)
-#Intresting to note CA has a big total of OTHER I would be curious to explore what that might include. Second is still FUNGICIDE. But with production of > 10 x that of floridas only about a 5 x increase in Fungicide is also intresting to explore
 ```
 
-```{r}
-#| Listing the three chemicals i want to explore and compare
-#| 1. CAPTAN = 81301 a FUNGICIDE used alot in both states.
-#| 2. Fertilizer Phosphate probably the most famous chemical here and so it deserves exploring
-#| 3. CHLOROPICRIN = 81501 the number one chemical by a margin in the number one production market deserves some exploration.
-```
+## Chemicals I Chose to Explore
+
+1\. CAPTAN = 81301 a FUNGICIDE used alot in both states.
+
+2\. Fertilizer Phosphate probably the most famous chemical here and so it deserves exploring
+
+3\. CHLOROPICRIN = 81501 the number one chemical by a margin in the number one production market deserves some exploration. But not a lot of data for Florida unfortunatly
+
+### Captan = 81301
+
+I first filtered pesticide data for **Captan (ID 81301)** from both California and Florida survey data sets and extracted only the year, item, and value columns while adding a state identifier. I then combined them into a single dataset. Then I had AI create a check for duplicate entries because I was facing errors and this helped indentify them earlier. Then I reshaped the final table to display each pesticide measurement (item) as its own column with corresponding values for easy comparison between years and states. The Graphs tell an interesting story. Of course with much higher production California has more total usage but on a per acre bases and on a total precenatage of acres applied Florida uses much more **Captan (ID 81301).** But the last metric actually saw a flip from 2021 to 2023 as Florida now uses less LB per Acre on average than California.
 
 ```{r}
 #| Exploring CAPTAN = 81301
@@ -776,6 +811,8 @@ ggplot(captan_data %>% filter(Item == "MEASURED IN LB / ACRE / YEAR"),
 
 
 ```
+
+### Phosphate
 
 ```{r}
 #| Exploring Phosphate
@@ -852,8 +889,9 @@ ggplot(phosphate_data %>% filter(Item == "MEASURED IN LB / ACRE / YEAR"),
 
 ```
 
+I was intending on creating some new visualizations, but the only key difference I made was merging the two tables avg application and area applied into one graph. I thought that made the comparison between Florida and California on a AREA bases very easy to see.
+
 ```{r}
-#| build on last chemcial analysis and create some new graphics
 
 data_ca <- clean_straw_sur_c %>%
   filter(grepl("PHOSPHATE", Domain_Category)) %>%
@@ -892,7 +930,6 @@ data %>%
   kable_classic(full_width = FALSE, html_font = "Cambria") %>%
   add_header_above(c("State" = 1, "Phosphate Application Metrics" = 5))
 
-# Bar Plot: Total Phosphate Usage
 ggplot(data, aes(x = State, y = Total_Usage_LB, fill = State)) +
   geom_bar(stat = "identity", width = 0.5, color = "black") +
   labs(
@@ -903,7 +940,6 @@ ggplot(data, aes(x = State, y = Total_Usage_LB, fill = State)) +
   scale_fill_manual(values = c("California" = "steelblue", "Florida" = "darkorange")) +
   theme_minimal()
 
-# Stacked Bar Plot: Applications and Percent Area Treated
 data_long <- data %>%
   select(State, Applications_Avg, Percent_Area_Treated) %>%
   pivot_longer(cols = -State, names_to = "Metric", values_to = "Value")
@@ -923,6 +959,10 @@ ggplot(data_long, aes(x = State, y = Value, fill = Metric)) +
 
 
 ```
+
+### CHLOROPICRIN = 81501
+
+Here I used a lot of old code to do some of the same in the California data and I was able to make a table and a not so useful graph. I could split the graph and isolate the total so its more readable, but since I discovered this chemical was only present in California I decided to focus on other exploration.
 
 ```{r}
 #| Exploring third Chemical CHLOROPICRIN = 81501
@@ -996,6 +1036,10 @@ ggplot(data_long, aes(x = Metric, y = Value, fill = Metric)) +
 
 ```
 
+### Organic vs Processed
+
+I started by pulling out the Organic data from California and Florida just to get an idea what values items metrics and such we were working with and could build an analysis on. But when I went to do the same for processed or conventional strawberries I did some initial searches in the tibbles and found almost no data for Processed or non conventional. I think processed had 3 values in total not enough to build any sort of analysis on. I decided to explore something else although I would have enoyed comparing these categories on price, cost, and volume.
+
 ```{r}
 #| Production and sales Organic vs Non Organic (Conventional) On volume and price
 
@@ -1012,7 +1056,7 @@ organic_dataf <- clean_straw_cen_f %>%
   select(Year, Category, Item, Value, CV_Percent)
 
 organic_dataf %>%
-  kable("html", caption = "Key Organic Strawberry Data from California") %>%
+  kable("html", caption = "Key Organic Strawberry Data from Florida") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE)
 
 #The CV is really high in Cali and does not have enough infomration in Florida to be interesting to look at.
@@ -1020,6 +1064,10 @@ organic_dataf %>%
 
 
 ```
+
+### Net Profit/Loss Sale Interval
+
+I had seen alot of FARM SALES in the Domain and wanted to explore this. I noted that it was formatted in a similar manor as the Area Operated and so i used many of the same methods as I did then. I cleaned and standardized the sales range data by removing special characters, converting text to numeric values, calculating total net income across all categories. I also implemented the lower upper method and created a very similar table to the one we made in class.
 
 ```{r}
 #| there was very little data to work with in regards to organic strawberries
@@ -1091,6 +1139,8 @@ netinc_sales_table |>
   kable_classic(full_width = F, html_font = "Cambria") |> 
   add_header_above(c("Sales Range ($)" = 2, " " = 1, " " = 1))
 ```
+
+I repeated all the steps on the California Data
 
 ```{r}
 #| Using same code on california
@@ -1164,6 +1214,10 @@ netinc_area_table |>
   add_header_above(c("Area Range (acres)" = 2, " " = 1, " " = 1))
 
 ```
+
+### Farm Sales Visualization
+
+I wanted to visualize both states on their own first to get an idea of their trends more clearly and then side by side to create a comparison. I was having trouble organizing trhe x axis as it could get overcrowded and used some AI tools to make slight adjjstments to the visualizations. The results seem to show that in both states the majority of the net profits come from the big volume sales. California seems to. be a bit more efficent in making money on smaller sales, but still sees a large proportion of its sales coming from sales that are above \$1 M. For both a couple big sales are much more profitable than a ton of small ones.
 
 ```{r}
 #| want to make 3 graphs one for each alone one comparing the two
@@ -1249,29 +1303,3 @@ ggplot(combined_comparison, aes(x = bin, y = Value/1e6, fill = State)) +
     plot.subtitle = element_text(size = 12)
   )
 ```
-
-\
-
-```{r}
-#relationships between numbers driving income
-#Tables, Kable, Kablextra
-#make plots, esquisser, ggplot, ggplot2
-#label chunks
-#piuck 3 chenmicals 
-#contrast chemical us inflorida vs california
-#pick somne measures to compare them
-#look at income from florida vs california in organic convenital or processed
-# maybe compare fruit size between markets
-#include writing explaining insights and doings
-#maybe add images
-
-#seperate producers and operations
-
-#Pick three chemical treatments used for conventional strawberries in both states and contrast their use. Try to find chemicals with divergent use patterns between the states. Produce, tables, plots, and descriptions of the chemicals, how they are used, and how their use differs between California and Florida.
-
-#Compare the production and sales of organic and conventional strawberries and strawberries sold for processing. Show differences in price and volume between California and Florida. How do price, cost, and volume relationships change over the years?
-
-
-```
-
-Examine the data. How is it organized?
