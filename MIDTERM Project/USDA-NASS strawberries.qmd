@@ -1,9 +1,7 @@
 ---
 title: "Strawberry EDA"
 author: "Luke Mager: U17823225"
-format: 
-  html:
-    embed-resources: true
+format: html
 editor: visual
 ---
 
@@ -84,6 +82,7 @@ library(knitr)
 library(kableExtra)
 library(tidyverse)
 library(stringr)
+library(tinytex)
 ```
 
 ## Read the file
@@ -100,7 +99,7 @@ source("my_functions.R")
 ```
 
 ```{r}
-#| Examine data and Drop columns
+#| label: Examine data and Drop columns
 library(rlang)
 library(dplyr)
 strawb <- strawberry |> drop_one_value_col()
@@ -112,7 +111,7 @@ strawb <- strawberry |> drop_one_value_col()
 We ran this function in class and I used it multiple times throughout the exploration process, but I made an adjustment later on in the the process that now seems to cause an error when running the code continuously. I have decided to comment it out since it has served its use in identifying of interest records and building from there.
 
 ```{r}
-#| Exploring starwberry data
+#| label: Exploring starwberry data
 show_unique <- function(data, nrows = 10) {
   items <- tibble()
   for (col_name in colnames(data)) {
@@ -138,7 +137,7 @@ strwb_census <- strawb |> filter(Program == "CENSUS")
 ```
 
 ```{r}
-#|label: examining the Census and Survey
+#| label: examining the Census and Survey
 s_census <- strwb_census |> drop_one_value_col(prt_val = TRUE)
 
 s_survey <- strwb_survey |> drop_one_value_col(prt_val = TRUE)
@@ -213,7 +212,7 @@ view(straw_sur_f)
 Something breifly mentioned in class the week after break was that in the census tables we have values and CV %. This would allow us to calculate the SD for all of these inputs which may be of interest. I took on this challenge. I had to convert all the data in CV and Value to numeric so removing spaces and commas and then using these numeric values to create a new column SD. I applied the function to both Florida and Cali tables at the same time and then reassigned back to original names. I had orginally forgot survey data did not include CV % that is why some extra code is in there.
 
 ```{r}
-#| Data exploration of four tibbles, Also creating a SD column
+#| label: Data exploration of four tibbles, Also creating a SD column
 census_tables <- list(straw_cen_c, straw_cen_f)  # has a CV (%)
 survey_tables <- list(straw_sur_c, straw_sur_f)  # do not have CV (%)
 
@@ -239,7 +238,7 @@ view(straw_sur_f)
 ```
 
 ```{r}
-#| Further cleaning
+#| label: Further cleaning
 straw_cen_c <- straw_cen_c %>% select(-`Commodity STRAW`) 
 straw_cen_c <- straw_cen_c %>% select(-STRAWB)
 straw_cen_f <- straw_cen_f %>% select(-`Commodity STRAW`) 
@@ -249,7 +248,7 @@ view(straw_cen_c)
 ```
 
 ```{r}
-#| Unique for each state and survey type
+#| label: Unique for each state and survey type
 
 #unique_surf <- straw_sur_f |> show_unique(nrows = 10)
 #unique_surc <- straw_sur_c |> show_unique(nrows = 10)
@@ -268,7 +267,7 @@ view(straw_cen_c)
 This was a final cleaning step that just tidied up some of the column names and ensured that all the numeric values were stored in numeric format so analysis could be conducted. I chose to replace NA with 0 in numeric columns even though it may not always be an appropriate assumption because its uninterperable either way and 0 will not result in errors.
 
 ```{r}
-#| Cleaning Census Florida
+#| label: Cleaning Census Florida
 
 clean_straw_cen_f <- straw_cen_f %>%
   mutate(
@@ -303,7 +302,7 @@ view(clean_straw_cen_f)
 ```
 
 ```{r}
-#| cleaning census data California
+#| label: cleaning census data California
 
 clean_straw_cen_c <- straw_cen_c %>%
   mutate(
@@ -340,7 +339,7 @@ view(clean_straw_cen_c)
 ```
 
 ```{r}
-#| cleaning Survey Florida
+#| label: cleaning Survey Florida
 
 clean_straw_sur_f <- straw_sur_f %>%
   select(where(~ any(!is.na(.)))) %>%
@@ -366,7 +365,7 @@ view(clean_straw_sur_f)
 ```
 
 ```{r}
-#| clean Califonia Survey
+#| label: clean Califonia Survey
 
 clean_straw_sur_c <- straw_sur_c %>%
   select(where(~ any(!is.na(.)))) %>%
@@ -398,7 +397,7 @@ This was the old question one asking where strawberries were being grown and I h
 The filter I had created was built for further analysis into metrics such as acres and yield though i don't think it is fully functioning, but I onyl got as far as comparing total weight between the states which was still an interesting finding.
 
 ```{r}
-#| Attempting to. answer Question 1
+#| label: Attempting to. answer Question 1
 
 census_ca_fl <- bind_rows(
   clean_straw_cen_c %>% mutate(State = "California"),
@@ -433,7 +432,7 @@ ggplot(production_data, aes(x = State, y = Total_Value, fill = Metric)) +
 ### In Class Area Operations Table
 
 ```{r}
-#| taking the area operations table we completed in classes: 
+#| label: taking the area operations table we completed in classes 
 
 #unique_c_cen <- straw_cen_c |> show_unique(nrows = 10)
 
@@ -558,7 +557,7 @@ netinc_area_table |> kbl(caption = "Californina Average Net Income in 2022 by ar
 This was actually something I had worked on before our class where you made the perfect table. I hadn't thought to extraact the data ranges and print the lower and upper in seperate columns and so i was struggling to visualize in a ascending order and being able to fit the long x values on the axis.
 
 ```{r}
-#| Original attempt to graph area operated and net income
+#| label: Original attempt to graph area operated and net income
 
 income_area_data <- census_ca_fl %>% 
   filter(
@@ -594,7 +593,7 @@ if (nrow(income_area_data) > 0) {
 I thought before I dived into chemicals I wanted to use the neatly layed out table provided and create some visuals. I initially made these two one showing the net income distribution and the other the CV % and I had AI clean up the graphs and make them more visually appealing. It added things like color for each level and the slight angel to the the x axis, but I probably could do without the additional key on the right.
 
 ```{r}
-#| Creating a graphic from the table we made in class.
+#| label: Creating a graphic from the table we made in class.
 
 library(ggplot2)
 ggplot(netinc_area_table, aes(x = factor(lower), y = Value, fill = factor(lower))) +
@@ -628,7 +627,7 @@ ggplot(netinc_area_table, aes(x = factor(lower), y = `CV (%)`, fill = factor(low
 The most challenging part of this process was extracting chemcial names from within the parenthesis of Domain Category. I used REGEX which took alot of research to figure out how to properly format to get it to do what I wanted. (?\<=: \\\\() was used to take anything after :( then the next step was using (.\*?) to capture the characters. Lastly (?=\\\\)) tells it to stop at ). I believe this worked and i was then able to apply it to both states and list chemicals with the highest totals.
 
 ```{r}
-#| Starting to look at chemicals
+#| label: Starting to look at chemicals
 chemical_domains <- c("CHEMICAL, FUNGICIDE", "CHEMICAL, HERBICIDE", 
                       "CHEMICAL, INSECTICIDE", "CHEMICAL, OTHER", 
                       "FERTILIZER", "OTHER")
@@ -662,7 +661,7 @@ top_chemicals_fl_filtered %>%
 I kept the TOTAL rows separate and. used them to help guide towards which subcategory of chemicals i might want to investigate.
 
 ```{r}
-#| Seperate table for Totals
+#| label: Seperate table for Totals
 total_chemicals_fl <- top_chemicals_fl %>%
   filter(Chemical_Name == "TOTAL")
 print(total_chemicals_fl)
@@ -670,7 +669,7 @@ print(total_chemicals_fl)
 ```
 
 ```{r}
-#| Repeating Chemical list steps for California
+#| label: Repeating Chemical list steps for California
 chemical_domains <- c("CHEMICAL, FUNGICIDE", "CHEMICAL, HERBICIDE", 
                       "CHEMICAL, INSECTICIDE", "CHEMICAL, OTHER", 
                       "FERTILIZER", "OTHER")
@@ -701,7 +700,7 @@ top_chemicals_ca_filtered %>%
 Intresting to note CA has a big total of OTHER I would be curious to explore what that might include. Second is still FUNGICIDE. But with production of \> 10 x that of floridas only about a 5 x increase in Fungicide is also intresting to explore. I also wanted tables for just fungicide as it seems to be one of the top subcategories in both and wanted a better look at the list.
 
 ```{r}
-#| Checking totals in California
+#| label: Checking totals in California
 
 total_chemicals_ca <- top_chemicals_ca %>%
   filter(Chemical_Name == "TOTAL")
@@ -741,7 +740,7 @@ print(top_fungicides_fl)
 I first filtered pesticide data for **Captan (ID 81301)** from both California and Florida survey data sets and extracted only the year, item, and value columns while adding a state identifier. I then combined them into a single dataset. Then I had AI create a check for duplicate entries because I was facing errors and this helped indentify them earlier. Then I reshaped the final table to display each pesticide measurement (item) as its own column with corresponding values for easy comparison between years and states. The Graphs tell an interesting story. Of course with much higher production California has more total usage but on a per acre bases and on a total precenatage of acres applied Florida uses much more **Captan (ID 81301).** But the last metric actually saw a flip from 2021 to 2023 as Florida now uses less LB per Acre on average than California.
 
 ```{r}
-#| Exploring CAPTAN = 81301
+#| label: Exploring CAPTAN = 81301
 
 captan_ca <- clean_straw_sur_c %>%
   filter(grepl("CAPTAN = 81301", Domain_Category)) %>%
@@ -815,7 +814,7 @@ ggplot(captan_data %>% filter(Item == "MEASURED IN LB / ACRE / YEAR"),
 ### Phosphate
 
 ```{r}
-#| Exploring Phosphate
+#| label: Exploring Phosphate
 
 phosphate_ca <- clean_straw_sur_c %>%
   filter(grepl("PHOSPHATE", Domain_Category) & grepl("FERTILIZER", Domain_Category)) %>%
@@ -965,8 +964,7 @@ ggplot(data_long, aes(x = State, y = Value, fill = Metric)) +
 Here I used a lot of old code to do some of the same in the California data and I was able to make a table and a not so useful graph. I could split the graph and isolate the total so its more readable, but since I discovered this chemical was only present in California I decided to focus on other exploration.
 
 ```{r}
-#| Exploring third Chemical CHLOROPICRIN = 81501
-#| unfortunatly no data for florida 
+#| label: Exploring third Chemical CHLOROPICRIN = 81501
 data_ca_chloro <- clean_straw_sur_c %>%
   filter(grepl("CHLOROPICRIN = 81501", Domain_Category)) %>%
   group_by(Item) %>%
@@ -1041,7 +1039,7 @@ ggplot(data_long, aes(x = Metric, y = Value, fill = Metric)) +
 I started by pulling out the Organic data from California and Florida just to get an idea what values items metrics and such we were working with and could build an analysis on. But when I went to do the same for processed or conventional strawberries I did some initial searches in the tibbles and found almost no data for Processed or non conventional. I think processed had 3 values in total not enough to build any sort of analysis on. I decided to explore something else although I would have enoyed comparing these categories on price, cost, and volume.
 
 ```{r}
-#| Production and sales Organic vs Non Organic (Conventional) On volume and price
+#| label: Production and sales Organic vs Non Organic (Conventional) On volume and price
 
 organic_datac <- clean_straw_cen_c %>%
   filter(grepl("ORGANIC", Category, ignore.case = TRUE)) %>%
@@ -1070,8 +1068,7 @@ organic_dataf %>%
 I had seen alot of FARM SALES in the Domain and wanted to explore this. I noted that it was formatted in a similar manor as the Area Operated and so i used many of the same methods as I did then. I cleaned and standardized the sales range data by removing special characters, converting text to numeric values, calculating total net income across all categories. I also implemented the lower upper method and created a very similar table to the one we made in class.
 
 ```{r}
-#| there was very little data to work with in regards to organic strawberries
-#| I wanted to explore the Farm Sales Domain and find the net. profit or loss for each sale interval in Florida vs California
+#| label: there was very little data to work with in regards to organic strawberries. I wanted to explore the Farm Sales Domain and find the net. profit or loss for each sale interval in Florida vs California
 
 fl_cen_f_22 <- clean_straw_cen_f |> filter(Year == 2022 & State == "FLORIDA")
 
@@ -1143,7 +1140,7 @@ netinc_sales_table |>
 I repeated all the steps on the California Data
 
 ```{r}
-#| Using same code on california
+#| label: Using same code on california
 
 ca_cen_c_22 <- clean_straw_cen_c |> filter(Year == 2022 & State == "CALIFORNIA")
 
@@ -1220,7 +1217,7 @@ netinc_area_table |>
 I wanted to visualize both states on their own first to get an idea of their trends more clearly and then side by side to create a comparison. I was having trouble organizing trhe x axis as it could get overcrowded and used some AI tools to make slight adjjstments to the visualizations. The results seem to show that in both states the majority of the net profits come from the big volume sales. California seems to. be a bit more efficent in making money on smaller sales, but still sees a large proportion of its sales coming from sales that are above \$1 M. For both a couple big sales are much more profitable than a ton of small ones.
 
 ```{r}
-#| want to make 3 graphs one for each alone one comparing the two
+#| label: want to make 3 graphs one for each alone one comparing the two
 netinc_area_table_ca <- netinc_area_table |> 
   mutate(State = "California")
 
