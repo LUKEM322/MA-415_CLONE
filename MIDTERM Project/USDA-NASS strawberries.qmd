@@ -1,6 +1,6 @@
 ---
 title: "Strawberry EDA"
-author: "Luke Mager: U17823225"
+author: "Luke Mager : U17823225"
 format: html
 editor: visual
 ---
