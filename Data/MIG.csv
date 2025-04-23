@@ -1,0 +1,55 @@
+"PERSONS BORN OVERSEAS","...2","...3","...4","...5"
+NA,NA,NA,NA,NA
+"Measure code","Parent Description","Measure Description",2016,2021
+"TOTMIG_3","Number of persons born overseas - Census","Males born overseas (no.)",33,35
+"TOTMIG_2","Number of persons born overseas - Census","Females born overseas (no.)",28,44
+"TOTMIG_4","Number of persons born overseas - Census","Persons born overseas (no.)",57,77
+"AGEMIG_6","Age of persons born overseas - Census","20-24 years (no.)",3,NA
+"AGEMIG_7","Age of persons born overseas - Census","25-29 years (no.)",3,6
+"AGEMIG_8","Age of persons born overseas - Census","30-34 years (no.)",7,15
+"AGEMIG_9","Age of persons born overseas - Census","35-39 years (no.)",9,6
+"AGEMIG_10","Age of persons born overseas - Census","40-44 years (no.)",3,11
+"AGEMIG_11","Age of persons born overseas - Census","45-49 years (no.)",3,6
+"AGEMIG_12","Age of persons born overseas - Census","50-54 years (no.)",11,NA
+"AGEMIG_13","Age of persons born overseas - Census","55-59 years (no.)",NA,6
+"AGEMIG_14","Age of persons born overseas - Census","60-64 years (no.)",4,9
+"AGEMIG_15","Age of persons born overseas - Census","65-69 years (no.)",4,5
+"AGEMIG_16","Age of persons born overseas - Census","70-74 years (no.)",NA,6
+"AGEMIG_17","Age of persons born overseas - Census","75-79 years (no.)",7,NA
+"AGEMIG_18","Age of persons born overseas - Census","80-84 years (no.)",NA,3
+"AGEMIG_19","Age of persons born overseas - Census","85 years and over (no.)",NA,6
+"ARRMIG_2","Year of arrival of persons born overseas - Census","Arrived within 5 years (%)",14,13
+"ARRMIG_3","Year of arrival of persons born overseas - Census","Arrived 5-10 years ago (%)",17.5,24.7
+"ARRMIG_4","Year of arrival of persons born overseas - Census","Arrived over 10 years ago (%)",77.2,49.4
+"ARRMIG_5","Year of arrival of persons born overseas - Census","Arrival not stated (%)",5.3,9.1
+"CITMIG_2","Citizenship status of persons born overseas - Census","Australian citizen (%)",61.4,50.6
+"CITMIG_3","Citizenship status of persons born overseas - Census","Not an Australian citizen (%)",45.6,45.5
+"RELMIG_3","Religious affiliation of persons born overseas - Census","Christianity (%)",50.9,28.6
+"RELMIG_11","Religious affiliation of persons born overseas - Census","Secular beliefs, other spiritual beliefs, no religion (%)",38.6,53.2
+"RELMIG_9","Religious affiliation of persons born overseas - Census","Religious affiliation inadequately described or not stated (%)",8.8,5.2
+"ENGMIG_2","English proficiency of persons born overseas - Census","Proficient in English (%)",93,92.2
+"QUALMIG_2","Level of highest educational attainment of persons born overseas - Census","Postgraduate degree level (%)",5.8,7.2
+"QUALMIG_4","Level of highest educational attainment of persons born overseas - Census","Bachelor degree level (%)",9.6,23.2
+"QUALMIG_5","Level of highest educational attainment of persons born overseas - Census","Advanced diploma and diploma level (%)",19.2,13
+"QUALMIG_6","Level of highest educational attainment of persons born overseas - Census","Certificate level (%)",13.5,24.6
+"QUALMIG_7","Level of highest educational attainment of persons born overseas - Census","School education level (%)",30.8,30.4
+"QUALMIG_8","Level of highest educational attainment of persons born overseas - Census","Education not stated (%)",5.8,4.3
+"OCCMIG_2","Occupation of persons born overseas - Persons aged 15 years and over - Census","Managers (%)",15.9,14
+"OCCMIG_3","Occupation of persons born overseas - Persons aged 15 years and over - Census","Professionals (%)",6.8,6
+"OCCMIG_4","Occupation of persons born overseas - Persons aged 15 years and over - Census","Technicians and trades workers (%)",18.2,22
+"OCCMIG_5","Occupation of persons born overseas - Persons aged 15 years and over - Census","Community and personal service workers (%)",15.9,14
+"OCCMIG_6","Occupation of persons born overseas - Persons aged 15 years and over - Census","Clerical and administrative workers (%)",6.8,24
+"OCCMIG_7","Occupation of persons born overseas - Persons aged 15 years and over - Census","Sales workers (%)",6.8,16
+"OCCMIG_8","Occupation of persons born overseas - Persons aged 15 years and over - Census","Machinery operators and drivers (%)",NA,6
+"OCCMIG_9","Occupation of persons born overseas - Persons aged 15 years and over - Census","Labourers (%)",18.2,12
+"OCCMIG_11","Occupation of persons born overseas - Persons aged 15 years and over - Census","Overseas born population employed (no.)",44,50
+"LFMIG_6","Labour force status of persons born overseas - Persons aged 15 years and over - Census","Employed (no.)",44,50
+"LFMIG_2","Labour force status of persons born overseas - Persons aged 15 years and over - Census","In the labour force (no.)",44,54
+"LFMIG_4","Labour force status of persons born overseas - Persons aged 15 years and over - Census","Participation rate (%)",84.6,78.3
+"LFMIG_11","Labour force status of persons born overseas - Persons aged 15 years and over - Census","Not in the labour force (%)",17.3,15.9
+"LFMIG_12","Labour force status of persons born overseas - Persons aged 15 years and over - Census","Labour force status not stated (%)",5.8,NA
+"LFMIG_7","Labour force status of persons born overseas - Persons aged 15 years and over - Census","Overseas born population aged 15 years and over (no.)",52,69
+"INCMIG_2","Total personal income (weekly) of persons born overseas - Persons aged 15 years and over - Census","$1-$499 per week (%)",21.2,18.8
+"INCMIG_3","Total personal income (weekly) of persons born overseas - Persons aged 15 years and over - Census","$500-$999 per week (%)",21.2,34.8
+"INCMIG_4","Total personal income (weekly) of persons born overseas - Persons aged 15 years and over - Census","$1000-$1999 per week (%)",36.5,52.2
+"INCMIG_5","Total personal income (weekly) of persons born overseas - Persons aged 15 years and over - Census","$2000-$2999 per week (%)",7.7,4.3

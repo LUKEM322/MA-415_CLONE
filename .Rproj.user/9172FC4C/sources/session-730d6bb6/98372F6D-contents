@@ -1,0 +1,13 @@
+library(readxl)
+library(writexl)
+
+excel_path <- "Data/Lord_Howe_Data.xlsx"  
+
+sheet_names <- excel_sheets(excel_path)
+
+# Loop through each sheet and save it as a CSV file
+for (sheet in sheet_names) {
+  data <- read_excel(excel_path, sheet = sheet)
+  file_name <- paste0(sheet, ".csv")
+  write.csv(data, file = file_name, row.names = FALSE)
+}
