@@ -1,0 +1,72 @@
+"EDUCATION AND EMPLOYMENT","...2","...3","...4","...5","...6","...7","...8","...9","...10","...11","...12"
+NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Measure code","Parent Description","Measure Description",2011,2016,2017,2018,2019,2020,2021,2022,2023
+"PRESCH_2","Children enrolled in a preschool or preschool program (4 and 5 year olds)","4 year olds enrolled in preschool or preschool program (no.)",NA,NA,NA,NA,4,NA,NA,NA,NA
+"PRESCH_5","Children enrolled in a preschool or preschool program (4 and 5 year olds)","Children enrolled in preschool (no.)",NA,NA,NA,NA,4,4,4,NA,NA
+"PRESCH_8","Children enrolled in a preschool or preschool program (4 and 5 year olds)","Children enrolled in a preschool or preschool program (no.)",NA,NA,NA,NA,4,4,4,NA,NA
+"PRESCH_11","Children attending a preschool or preschool program (4 and 5 year olds)","Children attending preschool for 15 hours or more (no.)",NA,NA,NA,NA,4,4,NA,NA,NA
+"LEED_2","Jobs in Australia - year ended 30 June","Number of jobs held by females",NA,246,274,270,272,254,NA,NA,NA
+"LEED_3","Jobs in Australia - year ended 30 June","Number of jobs held by males",NA,253,235,252,252,247,NA,NA,NA
+"LEED_4","Jobs in Australia - year ended 30 June","Number of jobs",NA,503,509,524,525,500,NA,NA,NA
+"LEED_5","Jobs in Australia - year ended 30 June","Number of employee jobs - agriculture, forestry and fishing",NA,NA,10,8,7,3,NA,NA,NA
+"LEED_7","Jobs in Australia - year ended 30 June","Number of employee jobs - manufacturing",NA,NA,NA,5,28,20,NA,NA,NA
+"LEED_9","Jobs in Australia - year ended 30 June","Number of employee jobs - construction",NA,NA,NA,5,5,4,NA,NA,NA
+"LEED_11","Jobs in Australia - year ended 30 June","Number of employee jobs - retail trade",NA,24,29,21,35,12,NA,NA,NA
+"LEED_12","Jobs in Australia - year ended 30 June","Number of employee jobs - accommodation and food services",NA,178,159,181,142,172,NA,NA,NA
+"LEED_13","Jobs in Australia - year ended 30 June","Number of employee jobs - transport, postal and warehousing",NA,55,62,52,29,31,NA,NA,NA
+"LEED_15","Jobs in Australia - year ended 30 June","Number of employee jobs - finance and insurance services",NA,NA,6,5,7,11,NA,NA,NA
+"LEED_16","Jobs in Australia - year ended 30 June","Number of employee jobs - rental, hiring and real estate services",NA,NA,3,7,7,NA,NA,NA,NA
+"LEED_17","Jobs in Australia - year ended 30 June","Number of employee jobs - professional, scientific and technical services",NA,NA,13,19,23,4,NA,NA,NA
+"LEED_18","Jobs in Australia - year ended 30 June","Number of employee jobs - administrative and support services",NA,NA,6,14,11,12,NA,NA,NA
+"LEED_19","Jobs in Australia - year ended 30 June","Number of employee jobs - public administration and safety",NA,81,77,75,96,109,NA,NA,NA
+"LEED_20","Jobs in Australia - year ended 30 June","Number of employee jobs - education and training",NA,NA,24,21,20,17,NA,NA,NA
+"LEED_21","Jobs in Australia - year ended 30 June","Number of employee jobs - health care and social assistance",NA,NA,11,10,19,7,NA,NA,NA
+"LEED_23","Jobs in Australia - year ended 30 June","Number of employee jobs - other services",NA,NA,4,11,9,3,NA,NA,NA
+"LEED_24","Jobs in Australia - year ended 30 June","Number of employee jobs - total",NA,426,431,438,444,420,NA,NA,NA
+"HIGH_2","Highest year of school completed - Persons aged 15 years and over who are no longer attending primary or secondary school - Census","Completed year 12 or equivalent (%)",47,49.7,NA,NA,NA,NA,54.5,NA,NA
+"HIGH_3","Highest year of school completed - Persons aged 15 years and over who are no longer attending primary or secondary school - Census","Completed year 11 or equivalent (%)",11.3,8.6,NA,NA,NA,NA,6.6,NA,NA
+"HIGH_4","Highest year of school completed - Persons aged 15 years and over who are no longer attending primary or secondary school - Census","Completed year 10 or equivalent (%)",28.1,26.2,NA,NA,NA,NA,24.7,NA,NA
+"HIGH_5","Highest year of school completed - Persons aged 15 years and over who are no longer attending primary or secondary school - Census","Completed year 9 or equivalent (%)",4.6,2.2,NA,NA,NA,NA,3.7,NA,NA
+"HIGH_6","Highest year of school completed - Persons aged 15 years and over who are no longer attending primary or secondary school - Census","Completed year 8 or below (%)",1.3,2.2,NA,NA,NA,NA,1.6,NA,NA
+"HIGH_8","Highest year of school completed - Persons aged 15 years and over who are no longer attending primary or secondary school - Census","Highest year of school completed not stated (%)",5.3,10.8,NA,NA,NA,NA,10,NA,NA
+"SCHOOL_2","Non-school qualifications - Persons aged 15 years and over - Census","Total persons with non-school qualification(s) (%)",61.9,66.6,NA,NA,NA,NA,71,NA,NA
+"SCHOOL_3","Non-school qualifications - Persons aged 15 years and over - Census","Postgraduate degree (%)",1,2.7,NA,NA,NA,NA,3.4,NA,NA
+"SCHOOL_4","Non-school qualifications - Persons aged 15 years and over - Census","Graduate diploma/graduate certificate (%)",1.3,0.9,NA,NA,NA,NA,1.3,NA,NA
+"SCHOOL_5","Non-school qualifications - Persons aged 15 years and over - Census","Bachelor degree (%)",9.3,13.4,NA,NA,NA,NA,14.5,NA,NA
+"SCHOOL_6","Non-school qualifications - Persons aged 15 years and over - Census","Advanced diploma/diploma (%)",9.3,8.2,NA,NA,NA,NA,9.5,NA,NA
+"SCHOOL_7","Non-school qualifications - Persons aged 15 years and over - Census","Certificate (%)",30.5,29.5,NA,NA,NA,NA,30.1,NA,NA
+"SCHOOL_9","Non-school qualifications - Persons aged 15 years and over - Census","Non-school qualification inadequately described (%)",3,2.1,NA,NA,NA,NA,NA,NA,NA
+"SCHOOL_10","Non-school qualifications - Persons aged 15 years and over - Census","Non-school qualification not stated (%)",7.6,12.2,NA,NA,NA,NA,11.9,NA,NA
+"FIELD_2","Non-school qualification: field of study - Persons aged 15 years and over - Census","Natural and physical sciences (%)",2.1,1.8,NA,NA,NA,NA,1.5,NA,NA
+"FIELD_4","Non-school qualification: field of study - Persons aged 15 years and over - Census","Engineering and related technologies (%)",19.8,13.7,NA,NA,NA,NA,16,NA,NA
+"FIELD_5","Non-school qualification: field of study - Persons aged 15 years and over - Census","Architecture and building (%)",5.3,6.8,NA,NA,NA,NA,4.5,NA,NA
+"FIELD_6","Non-school qualification: field of study - Persons aged 15 years and over - Census","Agriculture, environmental and related studies (%)",6.4,8.2,NA,NA,NA,NA,6.7,NA,NA
+"FIELD_7","Non-school qualification: field of study - Persons aged 15 years and over - Census","Health (%)",11.8,7.3,NA,NA,NA,NA,8.6,NA,NA
+"FIELD_8","Non-school qualification: field of study - Persons aged 15 years and over - Census","Education (%)",8.6,5.9,NA,NA,NA,NA,5.6,NA,NA
+"FIELD_9","Non-school qualification: field of study - Persons aged 15 years and over - Census","Management and commerce (%)",16,13.7,NA,NA,NA,NA,13.8,NA,NA
+"FIELD_10","Non-school qualification: field of study - Persons aged 15 years and over - Census","Society and culture (%)",7.5,5.9,NA,NA,NA,NA,7.4,NA,NA
+"FIELD_11","Non-school qualification: field of study - Persons aged 15 years and over - Census","Creative arts (%)",3.7,2.7,NA,NA,NA,NA,3.3,NA,NA
+"FIELD_12","Non-school qualification: field of study - Persons aged 15 years and over - Census","Food, hospitality and personal services (%)",15.5,10.5,NA,NA,NA,NA,14.5,NA,NA
+"FIELD_15","Non-school qualification: field of study - Persons aged 15 years and over - Census","Field of study inadequately described (%)",NA,1.8,NA,NA,NA,NA,1.9,NA,NA
+"FIELD_16","Non-school qualification: field of study - Persons aged 15 years and over - Census","Field of study not stated (%)",10.2,20.5,NA,NA,NA,NA,16.4,NA,NA
+"YOUTH_4","Youth engagement in work/study - Persons aged 15-19 years - Census","Working part-time and studying full-time (%)",NA,60,NA,NA,NA,NA,NA,NA,NA
+"YOUTH_6","Youth engagement in work/study - Persons aged 15-19 years - Census","Studying full-time (not working) (%)",66.7,60,NA,NA,NA,NA,NA,NA,NA
+"YOUTH_8","Youth engagement in work/study - Persons aged 15-19 years - Census","Total fully engaged (%)",100,140,NA,NA,NA,NA,NA,NA,NA
+"YOUTH_9","Youth engagement in work/study - Persons aged 15-19 years - Census","Total persons aged 15-19 years (no.)",6,5,NA,NA,NA,NA,4,NA,NA
+"LF_6","Labour force status - Persons aged 15 years and over - Census","Employed (no.)",214,226,NA,NA,NA,NA,241,NA,NA
+"LF_3","Labour force status - Persons aged 15 years and over - Census","Unemployed (no.)",5,6,NA,NA,NA,NA,6,NA,NA
+"LF_2","Labour force status - Persons aged 15 years and over - Census","In the labour force (no.)",218,229,NA,NA,NA,NA,245,NA,NA
+"LF_4","Labour force status - Persons aged 15 years and over - Census","Unemployment rate (%)",2.3,2.6,NA,NA,NA,NA,2.4,NA,NA
+"LF_5","Labour force status - Persons aged 15 years and over - Census","Participation rate (%)",72.2,69.6,NA,NA,NA,NA,64.6,NA,NA
+"LF_7","Labour force status - Persons aged 15 years and over - Census","Not in the labour force (%)",26.5,20.1,NA,NA,NA,NA,25.3,NA,NA
+"LF_8","Labour force status - Persons aged 15 years and over - Census","Labour force status not stated (%)",1.7,9.7,NA,NA,NA,NA,9.5,NA,NA
+"LF_9","Labour force status - Persons aged 15 years and over - Census","Total persons aged 15 years and over (no.)",302,329,NA,NA,NA,NA,379,NA,NA
+"EMP_OCC_2","Occupation of employed persons - Persons aged 15 years and over - Census","Managers (%)",20.1,23,NA,NA,NA,NA,26.1,NA,NA
+"EMP_OCC_3","Occupation of employed persons - Persons aged 15 years and over - Census","Professionals (%)",7.5,8,NA,NA,NA,NA,10,NA,NA
+"EMP_OCC_4","Occupation of employed persons - Persons aged 15 years and over - Census","Technicians and trades workers (%)",14.5,15,NA,NA,NA,NA,15.4,NA,NA
+"EMP_OCC_5","Occupation of employed persons - Persons aged 15 years and over - Census","Community and personal service workers (%)",13.1,12.4,NA,NA,NA,NA,5.8,NA,NA
+"EMP_OCC_6","Occupation of employed persons - Persons aged 15 years and over - Census","Clerical and administrative workers (%)",12.1,9.7,NA,NA,NA,NA,12.4,NA,NA
+"EMP_OCC_7","Occupation of employed persons - Persons aged 15 years and over - Census","Sales workers (%)",4.2,5.8,NA,NA,NA,NA,7.1,NA,NA
+"EMP_OCC_8","Occupation of employed persons - Persons aged 15 years and over - Census","Machinery operators and drivers (%)",1.9,2.7,NA,NA,NA,NA,1.7,NA,NA
+"EMP_OCC_9","Occupation of employed persons - Persons aged 15 years and over - Census","Labourers (%)",23.8,18.1,NA,NA,NA,NA,18.3,NA,NA
+"EMP_OCC_10","Occupation of employed persons - Persons aged 15 years and over - Census","Occupation inadequately described or not stated (%)",NA,5.3,NA,NA,NA,NA,4.6,NA,NA

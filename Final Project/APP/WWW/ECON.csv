@@ -1,0 +1,69 @@
+"ECONOMY AND INDUSTRY","...2","...3","...4","...5","...6","...7","...8","...9","...10","...11","...12","...13"
+NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Measure code","Parent Description","Measure Description",2011,2016,2017,2018,2019,2020,2021,2022,2023,2024
+"CABEE_2","Number of businesses - at 30 June","Number of non-employing businesses",NA,NA,NA,NA,24,26,27,30,33,NA
+"CABEE_3","Number of businesses - at 30 June","Number of employing businesses: 1-4 employees",NA,NA,NA,NA,15,21,25,26,26,NA
+"CABEE_4","Number of businesses - at 30 June","Number of employing businesses: 5-19 employees",NA,NA,NA,NA,14,9,10,11,11,NA
+"CABEE_38","Number of businesses - at 30 June","Number of employing businesses: 20 or more employees",NA,NA,NA,NA,NA,3,NA,NA,3,NA
+"CABEE_5","Number of businesses - at 30 June","Total number of businesses",NA,NA,NA,NA,54,57,63,69,72,NA
+"CABEE_7","Business entries - year ended 30 June","Number of non-employing business entries",NA,NA,NA,NA,NA,5,7,5,3,NA
+"CABEE_8","Business entries - year ended 30 June","Number of employing business entries: 1-4 employees",NA,NA,NA,NA,NA,5,3,3,3,NA
+"CABEE_9","Business entries - year ended 30 June","Number of employing business entries: 5-19 employees",NA,NA,NA,NA,NA,NA,NA,3,NA,NA
+"CABEE_10","Business entries - year ended 30 June","Total number of business entries",NA,NA,NA,NA,NA,10,10,7,6,NA
+"CABEE_12","Business exits - year ended 30 June","Number of non-employing business exits",NA,NA,NA,NA,NA,3,4,NA,NA,NA
+"CABEE_13","Business exits - year ended 30 June","Number of employing business exits: 1-4 employees",NA,NA,NA,NA,NA,3,NA,NA,NA,NA
+"CABEE_15","Business exits - year ended 30 June","Total number of business exits",NA,NA,NA,NA,NA,8,5,4,3,NA
+"CABEE_19","Number of businesses by industry - at 30 June","Agriculture, forestry and fishing (no.)",NA,NA,NA,NA,NA,NA,NA,3,NA,NA
+"CABEE_27","Number of businesses by industry - at 30 June","Manufacturing (no.)",NA,NA,NA,NA,NA,3,NA,3,3,NA
+"CABEE_21","Number of businesses by industry - at 30 June","Construction (no.)",NA,NA,NA,NA,6,7,5,6,7,NA
+"CABEE_37","Number of businesses by industry - at 30 June","Wholesale trade (no.)",NA,NA,NA,NA,NA,NA,3,3,NA,NA
+"CABEE_34","Number of businesses by industry - at 30 June","Retail trade (no.)",NA,NA,NA,NA,3,3,4,5,5,NA
+"CABEE_17","Number of businesses by industry - at 30 June","Accommodation and food services (no.)",NA,NA,NA,NA,20,22,26,28,30,NA
+"CABEE_36","Number of businesses by industry - at 30 June","Transport, postal and warehousing (no.)",NA,NA,NA,NA,11,10,8,8,8,NA
+"CABEE_33","Number of businesses by industry - at 30 June","Rental, hiring and real estate services (no.)",NA,NA,NA,NA,3,3,3,3,3,NA
+"CABEE_31","Number of businesses by industry - at 30 June","Professional, scientific and technical services (no.)",NA,NA,NA,NA,3,NA,3,4,4,NA
+"CABEE_18","Number of businesses by industry - at 30 June","Administrative and support services (no.)",NA,NA,NA,NA,NA,NA,4,5,5,NA
+"CABEE_22","Number of businesses by industry - at 30 June","Education and training (no.)",NA,NA,NA,NA,3,NA,3,NA,3,NA
+"CABEE_25","Number of businesses by industry - at 30 June","Health care and social assistance (no.)",NA,NA,NA,NA,3,NA,3,NA,3,NA
+"CABEE_30","Number of businesses by industry - at 30 June","Other services (no.)",NA,NA,NA,NA,NA,3,NA,3,NA,NA
+"CABEE_42","Number of businesses by turnover - at 30 June","Number of businesses with turnover of zero to less than $50k",NA,NA,NA,NA,4,7,7,13,9,NA
+"CABEE_43","Number of businesses by turnover - at 30 June","Number of businesses with turnover of $50k to less than $200k",NA,NA,NA,NA,18,18,28,19,17,NA
+"CABEE_44","Number of businesses by turnover - at 30 June","Number of businesses with turnover of $200k to less than $2m",NA,NA,NA,NA,28,29,25,33,42,NA
+"CABEE_45","Number of businesses by turnover - at 30 June","Number of businesses with turnover of $2m to less than $5m",NA,NA,NA,NA,3,NA,3,3,3,NA
+"CABEE_46","Number of businesses by turnover - at 30 June","Number of businesses with turnover of $5m to less than $10m",NA,NA,NA,NA,NA,NA,NA,3,NA,NA
+"CABEE_47","Number of businesses by turnover - at 30 June","Number of businesses with turnover of $10m or more",NA,NA,NA,NA,NA,3,NA,NA,NA,NA
+"CABEE_50","Business entries by turnover - year ended 30 June","Number of business entries with turnover of zero to less than $50k",NA,NA,NA,NA,NA,3,3,3,3,NA
+"CABEE_51","Business entries by turnover - year ended 30 June","Number of business entries with turnover of $50k to less than $200k",NA,NA,NA,NA,NA,5,5,3,NA,NA
+"CABEE_52","Business entries by turnover - year ended 30 June","Number of business entries with turnover of $200k to less than $2m",NA,NA,NA,NA,NA,NA,3,3,3,NA
+"CABEE_58","Business exits by turnover - year ended 30 June","Number of business exits with turnover of zero to less than $50k",NA,NA,NA,NA,NA,3,NA,3,NA,NA
+"CABEE_59","Business exits by turnover - year ended 30 June","Number of business exits with turnover of $50k to less than $200k",NA,NA,NA,NA,NA,NA,3,4,3,NA
+"CABEE_60","Business exits by turnover - year ended 30 June","Number of business exits with turnover of $200k to less than $2m",NA,NA,NA,NA,NA,3,3,NA,NA,NA
+"CABEE_61","Business exits by turnover - year ended 30 June","Number of business exits with turnover of $2m to less than $5m",NA,NA,NA,NA,NA,3,NA,NA,NA,NA
+"BUILDING_2","Building approvals - year ended 30 June","Private sector houses (no.)",NA,NA,NA,NA,NA,NA,NA,NA,NA,1
+"BUILDING_12","Building approvals - year ended 30 June","Total private sector dwelling units (no.)",NA,NA,NA,NA,NA,NA,NA,NA,NA,1
+"BUILDING_4","Building approvals - year ended 30 June","Total dwelling units (no.)",NA,NA,NA,NA,NA,NA,NA,NA,NA,1
+"BUILDING_5","Building approvals - year ended 30 June","Value of private sector houses ($m)",NA,NA,NA,NA,NA,NA,NA,NA,NA,1
+"BUILDING_7","Building approvals - year ended 30 June","Total value of private sector dwelling units ($m)",NA,NA,NA,NA,NA,NA,NA,NA,NA,1
+"BUILDING_8","Building approvals - year ended 30 June","Value of residential building ($m)",NA,NA,NA,NA,NA,NA,NA,NA,NA,1
+"BUILDING_10","Building approvals - year ended 30 June","Value of total building ($m)",NA,NA,NA,NA,NA,NA,NA,NA,1,1
+"EMP_IND_2","Industry of employment - Persons aged 15 years and over - Census","Agriculture, forestry and fishing (%)",4.2,3.5,NA,NA,NA,NA,1.7,NA,NA,NA
+"EMP_IND_4","Industry of employment - Persons aged 15 years and over - Census","Manufacturing (%)",1.4,NA,NA,NA,NA,NA,1.2,NA,NA,NA
+"EMP_IND_6","Industry of employment - Persons aged 15 years and over - Census","Construction (%)",4.2,3.1,NA,NA,NA,NA,5.4,NA,NA,NA
+"EMP_IND_7","Industry of employment - Persons aged 15 years and over - Census","Wholesale trade (%)",NA,1.3,NA,NA,NA,NA,NA,NA,NA,NA
+"EMP_IND_8","Industry of employment - Persons aged 15 years and over - Census","Retail trade (%)",5.1,4.4,NA,NA,NA,NA,3.3,NA,NA,NA
+"EMP_IND_9","Industry of employment - Persons aged 15 years and over - Census","Accommodation and food services (%)",42.1,38.9,NA,NA,NA,NA,37.8,NA,NA,NA
+"EMP_IND_10","Industry of employment - Persons aged 15 years and over - Census","Transport, postal and warehousing (%)",4.7,4.4,NA,NA,NA,NA,6.2,NA,NA,NA
+"EMP_IND_13","Industry of employment - Persons aged 15 years and over - Census","Rental, hiring and real estate services (%)",NA,NA,NA,NA,NA,NA,1.2,NA,NA,NA
+"EMP_IND_14","Industry of employment - Persons aged 15 years and over - Census","Professional, scientific and technical services (%)",2.3,NA,NA,NA,NA,NA,2.9,NA,NA,NA
+"EMP_IND_15","Industry of employment - Persons aged 15 years and over - Census","Administrative and support services (%)",6.5,8.8,NA,NA,NA,NA,2.9,NA,NA,NA
+"EMP_IND_16","Industry of employment - Persons aged 15 years and over - Census","Public administration and safety (%)",17.8,18.1,NA,NA,NA,NA,21.6,NA,NA,NA
+"EMP_IND_17","Industry of employment - Persons aged 15 years and over - Census","Education and training (%)",4.2,1.8,NA,NA,NA,NA,4.1,NA,NA,NA
+"EMP_IND_18","Industry of employment - Persons aged 15 years and over - Census","Health care and social assistance (%)",4.2,1.3,NA,NA,NA,NA,4.6,NA,NA,NA
+"EMP_IND_19","Industry of employment - Persons aged 15 years and over - Census","Arts and recreation services (%)",4.2,2.7,NA,NA,NA,NA,2.5,NA,NA,NA
+"EMP_IND_20","Industry of employment - Persons aged 15 years and over - Census","Other services (%)",1.9,4.4,NA,NA,NA,NA,NA,NA,NA,NA
+"EMP_IND_22","Industry of employment - Persons aged 15 years and over - Census","Industry of employment inadequately described or not stated (%)",NA,6.2,NA,NA,NA,NA,4.6,NA,NA,NA
+"EMP_IND_21","Industry of employment - Persons aged 15 years and over - Census","Total persons employed aged 15 years and over (no.)",214,226,NA,NA,NA,NA,241,NA,NA,NA
+"DWELLSTOCK_4","Estimated dwelling stock - as at June quarter","Houses - total (no.)",NA,NA,174,174,174,174,174,174,NA,NA
+"DWELLSTOCK_7","Estimated dwelling stock - as at June quarter","Townhouses - total (no.)",NA,NA,35,35,35,35,35,35,NA,NA
+"DWELLSTOCK_10","Estimated dwelling stock - as at June quarter","Apartments - total (no.)",NA,NA,25,25,25,25,25,25,NA,NA
+"DWELLSTOCK_13","Estimated dwelling stock - as at June quarter","Total dwellings (no.)",NA,NA,234,234,234,234,234,234,NA,NA
